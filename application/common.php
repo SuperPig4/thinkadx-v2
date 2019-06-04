@@ -10,3 +10,31 @@
 // +----------------------------------------------------------------------
 
 // 应用公共文件
+
+
+/**
+ * 返回成功
+ * @param string $msg 返回提示
+ * @param array $data 数据
+ */
+function success($msg = '', $data = []) {
+    return [
+        'code' => 1,
+        'msg' => $msg,
+        'data' => $data
+    ];
+}
+
+
+/**
+ * 返回失败
+ * @param string $msg 返回提示
+ * @param array $data 数据
+ */
+function error($msg = '', $data = []) {
+    return [
+        'code' => 0,
+        'msg' => $msg,
+        'data' => $data
+    ];
+}
