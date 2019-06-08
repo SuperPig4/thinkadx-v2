@@ -19,15 +19,21 @@ class ParamsChcke {
     }
 
     public static function setHeader($data = []) {
-        self::$header = $data;
+        if(is_array($data)) {
+            self::$header = $data;   
+        }
     }
 
     public static function setPost($data = []) {
-        self::$post = $data;
+        if(is_array($data)) {
+            self::$post = $data;
+        }
     }
 
     public static function setFiles($data = []) {
-        self::$files = $data;
+        if(is_array($data)) {
+            self::$files = $data;    
+        }
     }
 
     /**
@@ -78,13 +84,15 @@ class ParamsChcke {
         $header = self::$header;
         $params = self::$post;
         $files = self::$files;
-        $files = ['test'=>1];
 
         $data = array_merge($params, [
             'timestamp' => $header['timestamp'],
-            'token' => $header['token'],
-            'nonce' => self::$nonce
+            'nonce' => $header['nonce'],
         ]);
+
+        if(isset($header['token'])) {
+            $data['token'] = $header['token'];
+        }
 
         // 过滤在files里面的数组
         foreach($files as $key=>$val) {
@@ -97,12 +105,14 @@ class ParamsChcke {
             $val = rawurlencode($val);
         });
         ksort($data);
+    
         $signData = http_build_query($data);
         if(self::$appsecret) {
             $signData .= '&appsecret='.self::$appsecret;
         }
-
-        if(md5($signData) != $header['sign']) {
+        // var_dump($data);
+        // exit();
+        if(strtoupper(md5($signData)) != $header['sign']) {
             return '签名错误';
         }
 

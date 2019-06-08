@@ -8,13 +8,25 @@ use think\Controller;
 class CheckAdmin extends Controller {
 
     public function handle($request, \Closure $next) {
-        // ParamsChcke::setHeader($request->header());
-        // ParamsChcke::setPost($request->post(false));
-        // ParamsChcke::setFiles($request->file());
-        // $apiHeadrCheckRes = ParamsChcke::checkHeader();
-        // if(is_string($apiHeadrCheckRes)) {
-        //     error($apiHeadrCheckRes);
-        // }
+        
+        ParamsChcke::setHeader($request->header());
+        ParamsChcke::setPost($request->post(false));
+        ParamsChcke::setFiles($request->file());
+        $apiHeadrCheckRes = ParamsChcke::checkHeader();
+        if(is_string($apiHeadrCheckRes)) {
+            error($apiHeadrCheckRes);
+        }
+
+        if(isset($request->validateName)) {
+            try {
+                $validateInstance = validate("\\app\\admin\\validate\\".$request->validateName);
+                if(!$validateInstance->scene($request->action(true))->check($request->param())) {
+                    error($validateInstance->getError());
+                }
+            } catch(\think\exception\ClassNotFoundException $e) {
+                error('执行异常');
+            }
+        }
         
         $tokenCheckRes = $this->tokenCheck($request);
         if($tokenCheckRes['code'] == 0) {
@@ -24,7 +36,7 @@ class CheckAdmin extends Controller {
                 $request->user_id = $tokenCheckRes['data']['user_id'];
             }
         }
-        
+
         return $next($request);
     }
 
