@@ -44,7 +44,7 @@ class CheckAdmin extends Controller {
     //检测token
     protected function tokenCheck($request) {
         $ignoreList = [
-            'user' => ['login']
+            'user' => ['login', 'rese_token']
         ];
         $result = ['code'=>0, 'msg'=>'未知错误', 'data'=>['errorCode'=>0]];
         $ignoreAr = [];

@@ -81,7 +81,7 @@ class AdminOauth extends Model {
             if($tokenType == 'access') {
                 $updateData['last_use_access_token'] = $this->getAttr('access_token');
             }
-            Cache::rm($tokenType.'_'.$token); 
+            Cache::rm('admin_'.$tokenType.'_'.$token); 
         }
         $this->save($updateData);
         Cache::tag('admin_token')->set('admin_'.$tokenType.'_'.$newToken, $this->getAttr('admin_id'), $tokenTimeOut);

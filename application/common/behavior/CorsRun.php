@@ -5,6 +5,7 @@ use think\Facade\Response;
 
 class CorsRun {
     public function appInit(){
+        
         Response::header([
             'Access-Control-Allow-Headers' => '*',
             'Access-Control-Max-Age' => '600',
