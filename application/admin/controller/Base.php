@@ -5,9 +5,11 @@ use think\Controller;
 use think\Response;
 use think\Facade\Cache;
 
+
+
 class Base extends Controller {
     
-    protected $middleware = ['CheckAdmin'];
+    protected $middleware = ['CheckAdmin', 'AdminAfter'];
 
     public function __construct() {
         parent::__construct();

@@ -1,7 +1,6 @@
 <?php
 
 namespace app\admin\model;
-
 use think\Model;
 
 class Admin extends Model {
@@ -10,7 +9,7 @@ class Admin extends Model {
     protected $updateTime  = false;
 
     // 关联
-    public function admin_oauth() {
+    public function adminOauth() {
         return $this->hasMany('AdminOauth', 'admin_id');
     }
 
@@ -25,6 +24,8 @@ class Admin extends Model {
             'path' => $value
         ];
     }
+
+
 
 
 }

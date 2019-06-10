@@ -64,7 +64,7 @@ class Thinkadx extends Command
                             'nickname' => '超级管理员',
                             'access' => 'admin',
                             'group_id' => $adminGroup->id
-                        ])->admin_oauth()
+                        ])->adminOauth()
                         ->save(AdminOauth::getPasswordBaseConfig('admin'));
                         $output->writeln('admin data write success');
 

@@ -3,11 +3,13 @@ namespace app\admin\controller;
 use think\Controller;
 use think\Request;
 
+use Thinkadx\RuleAuth\Main;
 class Index extends Base {
 
     public function index()
     {
-        echo 'k';
+        $test = new Main('admin_rule', 'admin_group', 'admin', 1);
+        $test->chcke();
         // $test = new ParamsChcke();
         exit();
         return success('ces');

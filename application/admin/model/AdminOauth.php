@@ -49,6 +49,7 @@ class AdminOauth extends Model {
         return $runData;
     }
 
+
     /**
      * 密码登陆
      * @return bool/string

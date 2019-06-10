@@ -2,7 +2,7 @@
 
 namespace app\http\middleware;
 use think\facade\Cache;
-use ApiAuth\ParamsChcke;
+use Thinkadx\ApiAuth\ParamsChcke;
 use think\Controller;
 
 class CheckAdmin extends Controller {
@@ -36,7 +36,7 @@ class CheckAdmin extends Controller {
                 $request->user_id = $tokenCheckRes['data']['user_id'];
             }
         }
-
+        // $request->user_id = 1;
         return $next($request);
     }
 
@@ -44,11 +44,12 @@ class CheckAdmin extends Controller {
     //检测token
     protected function tokenCheck($request) {
         $ignoreList = [
-            'user' => ['login', 'rese_token']
+            'Index' => ['index'],
+            'AdminUser' => ['login', 'rese_token']
         ];
         $result = ['code'=>0, 'msg'=>'未知错误', 'data'=>['errorCode'=>0]];
         $ignoreAr = [];
-        $controller = $request->controller(true);
+        $controller = $request->controller();
 
         if(array_key_exists($controller, $ignoreList)) {
             $ignoreAr = $ignoreList[$controller];

@@ -1,5 +1,5 @@
 <?php
-namespace ApiAuth;
+namespace Thinkadx\ApiAuth;
 use think\facade\Cache;
 
 /**

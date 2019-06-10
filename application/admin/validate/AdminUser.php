@@ -1,10 +1,9 @@
 <?php
 
 namespace app\admin\validate;
-
 use think\Validate;
 
-class User extends Validate
+class AdminUser extends Validate
 {
     
 	protected $rule = [
@@ -19,7 +18,9 @@ class User extends Validate
         // 刷新令牌
         'refresh_token' => 'require',
         // 旧的令牌
-        'old_token' => 'require'
+        'old_token' => 'require',
+        // 新密码
+        'new_password' => 'require|min:6',
     ];
     
     protected $message = [
@@ -31,11 +32,15 @@ class User extends Validate
         'port_type' => '非法授权终端',
         'refresh_token' => 'refresh_token abnormal',
         'old_token' => 'old_token abnormal',
+        'new_password' => '请输入新密码',
+        'new_password.min' => '新密码最少6位数',
     ];
 
     protected $scene = [
         'login' => ['access', 'oauth_type', 'port_type', 'password'],
         'info' => [''],
-        'rese_token' => ['refresh_token', 'old_token']
+        'rese_token' => ['refresh_token', 'old_token'],
+        'set_password' => ['oauth_type', 'port_type', 'new_password']
     ];
+
 }

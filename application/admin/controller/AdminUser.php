@@ -7,9 +7,46 @@ use think\Db;
 use app\admin\model\Admin;
 use app\admin\model\AdminOauth;
 
-class User extends Base {
+
+
+class AdminUser extends Base {
     
-    protected $validateName = 'User';
+    protected $validateName = 'AdminUser';
+
+
+    // 修改密码
+    public function set_password() {
+        $data = $this->request->param();
+        //目前只有 pwd && api 才能够修改密码
+        if($data['port_type'] != 'api' || $data['oauth_type'] != 'pwd') {
+            error('非法操作');
+        }
+     
+        if($this->request->user_id != 1) {
+            if(empty($data['old_password'])) {
+                error('请输入旧密码');
+            } 
+        }
+
+        $user = Admin::get($this->request->user_id);
+        $oauthInfo = $user->adminOauth()->where([
+            'oauth_type' => $data['oauth_type'],
+            'port_type' => $data['port_type']
+        ])->find();
+        if(isset($data['old_password']) && (MD5($data['old_password'] . $oauthInfo->unique_identifier)) != $oauthInfo->identifier) {
+            error('旧密码错误');
+        } else {
+            $newPassword = MD5($data['new_password'] . $oauthInfo->unique_identifier);
+            //不同的话就修改
+            if($newPassword != $oauthInfo->identifier) {
+                $oauthInfo->identifier = $newPassword;
+                $oauthInfo->save();
+            }
+            $this->request->act_log = '修改了密码';
+            success('修改成功');
+        }
+    }
+
 
     // 刷新令牌
     public function rese_token() {
@@ -67,29 +104,6 @@ class User extends Base {
                                     'expired' => system_config('system.admin_access_token_time_out'),
                                     'token' => $newToken['token']
                                 ]);
-                                
-                                //第二次检测是否在临时缓存中
-                                // $tempTokenInfo = Cache::get('temp_token_'.$accessTokenKey);
-                                // if($tempTokenInfo && $tempTokenInfo['refresh_token'] == $refreshToken) {
-                                //     Db::commit();
-                                //     success('ok!',[
-                                //         'expired' => system_config('system.admin_access_token_time_out'),
-                                //         'token' => $tempTokenInfo['access_token']
-                                //     ]);
-                                // } else if(empty($tempTokenInfo)) {
-                                //     //正式进入刷新逻辑
-                                //     $newToken = $oauth->resetToken('access');
-                                //     Cache::tag('admin_temp_token')->set('temp_token_'.$accessTokenKey, [
-                                //         'access_token' => $newToken['token'],
-                                //         'refresh_token' => $refreshToken,
-                                //         'user_id' => $oauth->admin_id
-                                //     ], 600);
-                                //     Db::commit();
-                                //     success('ok!',[
-                                //         'expired' => system_config('system.admin_access_token_time_out'),
-                                //         'token' => $newToken['token']
-                                //     ]);
-                                // }
                             }
                         }
                     }
@@ -98,41 +112,6 @@ class User extends Base {
             }
         } 
         error('重新登陆', ['errorCode'=>-1000]);
-
-        // if(($accessValue && $refreshValue) && ($accessValue == $refreshValue)) {
-            
-        // } else {
-        //     //检测是否在白名单中
-        //     if(!Cache::get('temp_token_'.$key)) {
-        //         //检测是否在历史字段中
-        //         $oauth = AdminOauth::where('access_token', $oldToken)->findOrEmpty();
-                
-        //         // if(is_null($oauth)) {
-        //         //     $oauth = AdminOauth::where('last_use_access_token', $oldToken)->findOrEmpty();
-        //         //     if(!is_null($oauth)) {
-        //         //         error('您的账号在其他地方登陆了', ['errorCode'=>-1002]);
-        //         //     }
-        //         // } 
-                
-
-                
-        //         //检测数据库
-        //         AdminOauth::startTrans();
-        //         $oauth = AdminOauth::where('access_token', $oldToken)->lock(true)->findOrEmpty();
-        //         if(empty(Cache::get('temp_token_'.$key)) && (!is_null($oauth))) {
-        //             Cache::tag('admin_temp_token')->set('temp_token_'.$key, $oauth->admin_id, 60);
-        //             $newToken = $oauth->resetToken('access');
-        //             AdminOauth::commit();
-        //         } else if(is_null($oauth)) {
-        //             AdminOauth::commit();
-        //             error('重新登陆', ['errorCode'=>-1001]);
-        //         } 
-        //     }
-        // }
-        // success('ok!',[
-        //     'expired' => system_config('system.admin_access_token_time_out'),
-        //     'token' => $newToken['newToken']
-        // ]);
     }
 
 
@@ -151,7 +130,7 @@ class User extends Base {
             error('请输入正确的账号');
         } else {
 
-            $oauth = $user->admin_oauth()->where([
+            $oauth = $user->adminOauth()->where([
                 'port_type' => $data['port_type'],
                 'oauth_type' => $data['oauth_type']
             ])->find();
@@ -163,6 +142,8 @@ class User extends Base {
             }
             
             if(is_array($loginResult)) {
+                $this->request->user_id = $oauth->admin_id;
+                $this->request->act_log = '登陆成功';
                 success('ok!', $loginResult);
             } else {
                 error($loginResult);
