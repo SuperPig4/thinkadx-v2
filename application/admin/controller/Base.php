@@ -31,9 +31,9 @@ class Base extends Controller {
         }
     }
 
-    // public function index() {
-    //     echo 'test';
-    // }
+    
+    // 公共列表
+    
 
 
     
