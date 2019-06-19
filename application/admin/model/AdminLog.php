@@ -12,7 +12,7 @@ class AdminLog extends Model {
     protected $insert = ['admin_id', 'ip', 'module', 'controller', 'action'];  
 
     protected function setAdminIdAttr() {
-        return request()->user_id;
+        return USER_ID;
     }
 
     protected function setIpAttr() {

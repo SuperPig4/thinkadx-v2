@@ -102,15 +102,14 @@ class ParamsChcke {
         }
 
         array_walk($data, function(&$val, $key) {
-            $val = rawurlencode($val);
+            $val = urldecode($val);
         });
         ksort($data);
-    
         $signData = http_build_query($data);
         if(self::$appsecret) {
             $signData .= '&appsecret='.self::$appsecret;
         }
-        // var_dump($data);
+        // var_dump($signData);
         // exit();
         if(strtoupper(md5($signData)) != $header['sign']) {
             return '签名错误';

@@ -33,7 +33,8 @@ class CheckAdmin extends Controller {
             error($tokenCheckRes['msg'], $tokenCheckRes['data']);
         } else {
             if(array_key_exists('user_id', $tokenCheckRes['data'])) {
-                $request->user_id = $tokenCheckRes['data']['user_id'];
+                // $request->user_id = $tokenCheckRes['data']['user_id'];
+                define('USER_ID', $tokenCheckRes['data']['user_id']);
             }
         }
         // $request->user_id = 1;
@@ -43,6 +44,7 @@ class CheckAdmin extends Controller {
 
     //检测token
     protected function tokenCheck($request) {
+        
         $ignoreList = [
             'Index' => ['index'],
             'AdminUser' => ['login', 'rese_token'],

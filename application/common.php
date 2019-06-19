@@ -10,6 +10,19 @@
 // +----------------------------------------------------------------------
 
 // 应用公共文件
+define('TEST','test');
+
+/**
+ * 验证文件URL是否为本站
+ */
+function validate_file_url($url) {
+    $param = parse_url($url);
+    if(isset($param['path']) && is_file('./'.$param['path'])) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 
 /**

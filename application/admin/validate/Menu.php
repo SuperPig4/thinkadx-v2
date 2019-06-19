@@ -1,6 +1,7 @@
 <?php
 namespace app\admin\validate;
 use think\Validate;
+use think\Db;
 
 class Menu extends Validate {
     
@@ -16,7 +17,7 @@ class Menu extends Validate {
         // 操作
         'action' => 'require|max:34',
         // 上级ID
-        'father_id' => 'require|check_father_id'
+        'father_id' => 'require|number|check_father_id'
     ];
     
     protected $message = [
@@ -34,5 +35,23 @@ class Menu extends Validate {
 
     protected $scene = [
         'add_edit' => ['icon', 'title', 'module', 'controller', 'action', 'father_id']
-    ]
+    ];
+
+
+    protected function check_icon($value) {
+        return validate_file_url($value);
+    }
+
+    protected function check_father_id($value, $rule, $data) {
+        if($value && isset($data['id'])) {
+            $is = Db::name('AdminMenu')->where('id', $value)->count();
+            if($is) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return true;
+        }
+    }
 }

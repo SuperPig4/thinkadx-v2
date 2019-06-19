@@ -22,13 +22,13 @@ class AdminUser extends Base {
             error('非法操作');
         }
      
-        if($this->request->user_id != 1) {
+        if(USER_ID != 1) {
             if(empty($data['old_password'])) {
                 error('请输入旧密码');
             } 
         }
 
-        $user = Admin::get($this->request->user_id);
+        $user = Admin::get(USER_ID);
         $oauthInfo = $user->adminOauth()->where([
             'oauth_type' => $data['oauth_type'],
             'port_type' => $data['port_type']
@@ -117,7 +117,7 @@ class AdminUser extends Base {
 
     // 获得用户信息
     public function info() {
-        $userInfo = Admin::get($this->request->user_id);
+        $userInfo = Admin::get(USER_ID);
         success('ok!',$userInfo);
     }
 
@@ -142,7 +142,7 @@ class AdminUser extends Base {
             }
             
             if(is_array($loginResult)) {
-                $this->request->user_id = $oauth->admin_id;
+                define('USER_ID', $oauth->admin_id);
                 $this->request->act_log = '登陆成功';
                 success('ok!', $loginResult);
             } else {
