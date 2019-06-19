@@ -1,11 +1,14 @@
 <?php
 namespace app\admin\controller;
-
+use think\Facade\Request;
 class Menu extends Base {
 
     protected $validateName = 'Menu';
-    protected $beforeActionList = [
-        'test'
+    protected $modelName = 'AdminMenu';
+    // protected $table = 'AdminMenu';
+    protected $logs = [
+        'add' => '新增了栏目',
+        'edit' => '编辑了栏目'
     ];
 
     public function index() {
@@ -13,7 +16,9 @@ class Menu extends Base {
     }
 
     public function test() {
-        // $this->request->title = 222;
+        var_dump(Request::only(['title']));
+        exit();
+        // $this->request->tes2t = 222;
     }
 
 

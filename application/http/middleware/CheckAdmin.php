@@ -16,7 +16,7 @@ class CheckAdmin extends Controller {
         if(is_string($apiHeadrCheckRes)) {
             error($apiHeadrCheckRes);
         }
-
+        
         if(defined("Validate_Name")) {
             try {
                 $validateInstance = validate("\\app\\admin\\validate\\".Validate_Name);

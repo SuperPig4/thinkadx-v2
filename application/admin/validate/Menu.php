@@ -39,7 +39,13 @@ class Menu extends Validate {
 
 
     protected function check_icon($value) {
-        return validate_file_url($value);
+        $validateRes = validate_file_url($value);
+        if(is_string($validateRes)) {
+            request()->icon = $validateRes;
+            return true;
+        } else {
+            return false;
+        }
     }
 
     protected function check_father_id($value, $rule, $data) {

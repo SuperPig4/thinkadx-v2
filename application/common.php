@@ -18,7 +18,7 @@ define('TEST','test');
 function validate_file_url($url) {
     $param = parse_url($url);
     if(isset($param['path']) && is_file('./'.$param['path'])) {
-        return true;
+        return $param['path'];
     } else {
         return false;
     }
