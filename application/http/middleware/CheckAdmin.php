@@ -17,7 +17,7 @@ class CheckAdmin extends Controller {
             error($apiHeadrCheckRes);
         }
 
-        if(isset($request->validateName)) {
+        if(defined("Validate_Name")) {
             try {
                 $validateInstance = validate("\\app\\admin\\validate\\".Validate_Name);
                 if(!$validateInstance->scene($request->action(true))->check($request->param())) {
