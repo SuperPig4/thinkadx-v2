@@ -26,7 +26,8 @@ class Base extends Controller {
         }
 
         if(!empty($this->validateName)) {
-            $this->request->validateName = $this->validateName;
+            define('Validate_Name', $this->validateName);
+            // $this->request->validateName = $this->validateName;
         }
 
     }

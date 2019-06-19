@@ -19,7 +19,7 @@ class CheckAdmin extends Controller {
 
         if(isset($request->validateName)) {
             try {
-                $validateInstance = validate("\\app\\admin\\validate\\".$request->validateName);
+                $validateInstance = validate("\\app\\admin\\validate\\".Validate_Name);
                 if(!$validateInstance->scene($request->action(true))->check($request->param())) {
                     error($validateInstance->getError());
                 }
