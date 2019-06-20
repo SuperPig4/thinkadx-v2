@@ -17,10 +17,12 @@ class Menu extends Validate {
         // 操作
         'action' => 'require|max:34',
         // 上级ID
-        'father_id' => 'require|number|check_father_id'
+        'father_id' => 'require|number|check_father_id',
+        'id' => 'require|number'
     ];
     
     protected $message = [
+        'id' => '参数异常',
         'icon' => 'icon 字段必须存在',
         'title' => '请输入标题',
         'title.max' => '标题最长30个字符串',
@@ -34,6 +36,7 @@ class Menu extends Validate {
     ];
 
     protected $scene = [
+        'detail' => ['id'],
         'add_edit' => ['icon', 'title', 'module', 'controller', 'action', 'father_id']
     ];
 
