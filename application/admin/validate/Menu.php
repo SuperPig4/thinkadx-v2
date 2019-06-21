@@ -36,6 +36,7 @@ class Menu extends Validate {
     ];
 
     protected $scene = [
+        'index' => [''],
         'detail' => ['id'],
         'add_edit' => ['icon', 'title', 'module', 'controller', 'action', 'father_id']
     ];

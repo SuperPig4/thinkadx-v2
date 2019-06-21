@@ -9,7 +9,7 @@ class Index extends Base {
     public function index()
     {
         $test = new Main('admin_rule', 'admin_group', 'admin', 1);
-        $test->chcke();
+        $test->check();
         // $test = new ParamsChcke();
         exit();
         return success('ces');

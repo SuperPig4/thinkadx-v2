@@ -42,7 +42,7 @@ class Main {
      * @param string/bool $action
      * @return bool
      */
-    public function chcke($module = true, $controller = true, $action = true) {
+    public function check($module = true, $controller = true, $action = true) {
         $this->getInfoInit();
         if(empty($this->roleInfo)) {
             return false;
@@ -90,12 +90,10 @@ class Main {
                             } else {
                                 $newRoleInfo[$tempC[0]][$tempC[1]] = array_unique(array_merge($newRoleInfo[$tempC[0]][$tempC[1]], explode('-', $tempB[1])));
                             }
-                            
                         }
                     }
                     $data['roleInfo'] = $newRoleInfo;
                 }
-                echo '进来了';
                 //设置缓存
                 Cache::tag($this->ruleClassName.'_rule_auth')->set($key, $data);
             }
