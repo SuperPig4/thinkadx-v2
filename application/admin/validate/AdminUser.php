@@ -21,6 +21,8 @@ class AdminUser extends Validate
         'old_token' => 'require',
         // 新密码
         'new_password' => 'require|min:6',
+        // ID
+        'id' => 'number'
     ];
     
     protected $message = [
@@ -34,13 +36,14 @@ class AdminUser extends Validate
         'old_token' => 'old_token abnormal',
         'new_password' => '请输入新密码',
         'new_password.min' => '新密码最少6位数',
+        'id' => 'id 只能为数字'
     ];
 
     protected $scene = [
         'login' => ['access', 'oauth_type', 'port_type', 'password'],
         'info' => [''],
         'rese_token' => ['refresh_token', 'old_token'],
-        'set_password' => ['oauth_type', 'port_type', 'new_password']
+        'set_password' => ['oauth_type', 'port_type', 'new_password','id']
     ];
 
 }

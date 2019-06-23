@@ -25,15 +25,22 @@ class AdminUser extends Base {
         if(USER_ID != 1) {
             if(empty($data['old_password'])) {
                 error('请输入旧密码');
-            } 
+            } else if(!empty($data['id'])) {
+                error('非法操作');
+            }
         }
 
-        $user = Admin::get(USER_ID);
+        $user = Admin::get(empty($data['id']) ? USER_ID : $data['id']);
         $oauthInfo = $user->adminOauth()->where([
             'oauth_type' => $data['oauth_type'],
             'port_type' => $data['port_type']
         ])->find();
-        if(isset($data['old_password']) && (MD5($data['old_password'] . $oauthInfo->unique_identifier)) != $oauthInfo->identifier) {
+
+        if(empty($user) || empty($oauthInfo)) {
+            error('用户不存在');
+        }
+
+        if(empty($data['old_password']) == false && (MD5($data['old_password'] . $oauthInfo->unique_identifier)) != $oauthInfo->identifier) {
             error('旧密码错误');
         } else {
             $newPassword = MD5($data['new_password'] . $oauthInfo->unique_identifier);
