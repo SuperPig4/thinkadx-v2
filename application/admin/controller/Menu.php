@@ -46,4 +46,14 @@ class Menu extends Base {
         }
     }
 
+
+    // 删除
+    public function delete() {
+        success('ok!');
+        $id = $this->request->param('id/d');
+        AdminMenu::where('id', $id)->whereOr('father_id', $id)->delete();
+        $this->request->act_log = '删除了菜单分类';
+        success('ok!');
+    }
+
 }

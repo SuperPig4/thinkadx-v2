@@ -82,7 +82,7 @@ class Base extends Controller {
     // 公共编辑写
     public function add_edit() {
         $params = $this->get_params();
-
+      
         if(empty($this->table)) {
             $model = $this->get_model();
             if(!empty($model)) {
