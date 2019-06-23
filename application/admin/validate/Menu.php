@@ -7,23 +7,24 @@ class Menu extends Validate {
     
 	protected $rule = [
         // icon 
-        'icon' => 'require|check_icon',
+        'icon' => 'requireCallback:icon_is_must|check_icon',
         // 标题
         'title' => 'require|max:34',
         // 模块
-        'module' => 'require|max:34',
+        'module' => 'requireCallback:is_must|max:34',
         // 控制器
-        'controller' => 'require|max:34',
+        'controller' => 'requireCallback:is_must|max:34',
         // 操作
-        'action' => 'require|max:34',
+        'action' => 'requireCallback:is_must|max:34',
         // 上级ID
         'father_id' => 'require|number|check_father_id',
+        // ID
         'id' => 'require|number'
     ];
     
     protected $message = [
         'id' => '参数异常',
-        'icon' => 'icon 字段必须存在',
+        'icon' => '请上传图标',
         'title' => '请输入标题',
         'title.max' => '标题最长30个字符串',
         'module' => '请输入模块',
@@ -36,6 +37,7 @@ class Menu extends Validate {
     ];
 
     protected $scene = [
+        'get_list' => [''],
         'delete' => ['id'],
         'index' => [''],
         'detail' => ['id'],
@@ -43,13 +45,33 @@ class Menu extends Validate {
     ];
 
 
-    protected function check_icon($value) {
-        $validateRes = validate_file_url($value);
-        if(is_string($validateRes)) {
-            request()->icon = $validateRes;
+    protected function is_must($value, $data) {
+        if(empty($data['father_id'])) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    protected function icon_is_must($value, $data) {
+        if(empty($data['father_id'])) {
             return true;
         } else {
             return false;
+        }
+    }
+
+    protected function check_icon($value, $rule, $data) {
+        if(empty($data['father_id'])) {
+            $validateRes = validate_file_url($value);
+            if(is_string($validateRes)) {
+                request()->icon = $validateRes;
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return true;
         }
     }
 
