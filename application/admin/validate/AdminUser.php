@@ -22,7 +22,9 @@ class AdminUser extends Validate
         // 新密码
         'new_password' => 'require|min:6',
         // ID
-        'id' => 'number'
+        'id' => 'number',
+        // 分页
+        'p' => 'number'
     ];
     
     protected $message = [
@@ -40,6 +42,7 @@ class AdminUser extends Validate
     ];
 
     protected $scene = [
+        'index' => ['p'],
         'login' => ['access', 'oauth_type', 'port_type', 'password'],
         'info' => [''],
         'rese_token' => ['refresh_token', 'old_token'],

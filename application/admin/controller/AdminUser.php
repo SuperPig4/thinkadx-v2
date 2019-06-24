@@ -12,7 +12,7 @@ use app\admin\model\AdminOauth;
 class AdminUser extends Base {
     
     protected $validateName = 'AdminUser';
-
+    protected $modelName = 'Admin';
 
     // 修改密码
     public function set_password() {
@@ -157,6 +157,15 @@ class AdminUser extends Base {
             }
 
         }
+    }
+
+
+
+    protected function index_where_callback($db, $data) {
+        if(!empty($data['search'])) {
+            $db = $db->where('id|nickname', 'like', '%'.$data['search'].'%');
+        }
+        return $db->order('id DESC');
     }
 
 }

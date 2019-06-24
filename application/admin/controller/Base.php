@@ -57,6 +57,36 @@ class Base extends Controller {
 
     }
 
+
+    //公共列表
+    public function index() {
+        $params = $this->get_params();
+
+        if(empty($this->table)) {
+            $db = $this->get_model();
+        }
+        
+        if(empty($db)) {
+            $table = empty($this->table) ? $this->request->controller(true) : $this->table;
+            $db = Db::name($table);
+        }
+
+        // 检测是否有条件回调
+        if(method_exists($this, 'index_where_callback')) {
+            $db = $this->index_where_callback($db, $params);
+        }
+
+        $db->limit(25)->page(
+            (isset($params['p'])  ? $params : 1)
+        );
+        
+        if(isset($params['count'])) {
+            success('ok!', $db->count());
+        } else {
+            success('ok!', $db->select());
+        }
+    }
+
     
     // 公共详情
     public function detail() {
