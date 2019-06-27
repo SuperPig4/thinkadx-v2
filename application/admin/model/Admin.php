@@ -7,6 +7,7 @@ class Admin extends Model {
     
     protected $autoWriteTimestamp = true;
     protected $updateTime  = false;
+    protected $readonly = ['access', 'create_time'];
 
     // 关联
     public function adminOauth() {
@@ -23,6 +24,14 @@ class Admin extends Model {
             'url' => local_path_turn_url($value),
             'path' => $value
         ];
+    }
+
+    public function getStatusTextAttr() {
+        if($this->getAttr('status') == 1) {
+            return '正常';
+        } else {
+            return '暂停';
+        }
     }
 
 

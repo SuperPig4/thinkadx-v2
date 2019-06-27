@@ -50,9 +50,10 @@ class Base extends Controller {
         if(empty($actionIsHave)) {
             error('illegal action');
         }
-
+       
         if(!empty($this->validateName)) {
-            define('Validate_Name', $this->validateName);
+            $name = $this->validateName === true ? $this->request->controller() : $this->validateName;
+            define('Validate_Name', $name);
         }
 
     }
@@ -75,14 +76,17 @@ class Base extends Controller {
         if(method_exists($this, 'index_where_callback')) {
             $db = $this->index_where_callback($db, $params);
         }
-
-        $db->limit(25)->page(
-            (isset($params['p'])  ? $params : 1)
-        );
         
+
         if(isset($params['count'])) {
             success('ok!', $db->count());
         } else {
+            // 判断是否需要分页
+            if(!isset($params['all'])) {
+                $db->limit(25)->page(
+                    (isset($params['p'])  ? $params : 1)
+                );
+            }
             success('ok!', $db->select());
         }
     }
@@ -118,7 +122,7 @@ class Base extends Controller {
             if(!empty($model)) {
                 // 模型写入、编辑
                 $model->allowField(true);
-                if(isset($params['id'])) {
+                if(!empty($params['id'])) {
                     $actStatus = $model->save($params,['id' => $params['id']]);
                 } else {
                     $actStatus = $model->save($params);
@@ -129,7 +133,7 @@ class Base extends Controller {
         if(empty($model)) {
             $table = empty($this->table) ? $this->request->controller(true) : $this->table;
             $db = Db::name($table)->strict(false);
-            if(isset($params['id'])) {
+            if(!empty($params['id'])) {
                 $actStatus = $db->where('id', $params['id'])->update($params);
             } else {
                 $actStatus = $db->insert($params);
@@ -138,7 +142,7 @@ class Base extends Controller {
 
         if($actStatus !== false) {
             if(isset($this->logs)) {
-                if(isset($params['id'])) {
+                if(!empty($params['id'])) {
                     $log = $this->logs['edit'];
                 } else {
                     $log = $this->logs['add'];
@@ -151,6 +155,33 @@ class Base extends Controller {
         } else {
             error('操作失败');
         }
+    }
+
+
+    // 公共删除
+    public function delete() {
+        $params = $this->get_params();
+        if(empty($this->table)) {
+            $db = $this->get_model();
+        }
+        
+        if(empty($db)) {
+            $table = empty($this->table) ? $this->request->controller(true) : $this->table;
+            $db = Db::name($table);
+        }
+        $db->where('id', 'in', $params['id'])->delete();
+        
+        if(isset($this->logs)) {
+            if(isset($params['id'])) {
+                $log = $this->logs['edit'];
+            } else {
+                $log = $this->logs['add'];
+            }
+            if(!empty($log)) {
+                $this->request->act_log = $log;
+            }
+        }
+        success('操作成功');
     }
 
 

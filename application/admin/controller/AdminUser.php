@@ -8,11 +8,57 @@ use app\admin\model\Admin;
 use app\admin\model\AdminOauth;
 
 
-
 class AdminUser extends Base {
     
     protected $validateName = 'AdminUser';
     protected $modelName = 'Admin';
+    protected $beforeActionList = [
+        'check_access' =>  ['only' => 'add_edit'],
+    ];
+
+    protected $logs = [
+        'add' => '新增了管理员信息',
+        'edit' => '编辑了管理员信息'
+    ];
+
+
+    // 重新编辑增加
+    public function add_edit() {
+        $data = $this->request->param();
+        if(empty($data['id'])) {
+            // 新增
+            $status = Admin::create($data)
+            ->adminOauth()
+            ->save(AdminOauth::getPasswordBaseConfig($data['add_data_password']));
+        } else {
+            // 编辑
+            $model = new Admin();
+            $status = $model->save($data,['id' => $data['id']]);
+        }
+
+        if($status !== false) {
+            if(!empty($data['id'])) {
+                $log = $this->logs['edit'];
+            } else {
+                $log = $this->logs['add'];
+            }
+
+            if(!empty($log)) {
+                $this->request->act_log = $log;
+            }
+            success('操作成功!');
+        } else {
+            error('操作失败');
+        }
+    }
+
+
+    // 详情
+    public function detail() {
+        $userInfo = Admin::get($this->request->param('id/d'));
+        success('ok!',$userInfo);
+    }
+
 
     // 修改密码
     public function set_password() {
@@ -160,12 +206,21 @@ class AdminUser extends Base {
     }
 
 
+    protected function check_access() {
+        $data = $this->request->param();
+        if(empty($data['id']) && !empty($data['access'])) {
+            $isUse = Db::name('admin')->where('access', $data['access'])->count();
+            if($isUse) {
+                error('当前账号已被使用');
+            }
+        }
+    }
 
     protected function index_where_callback($db, $data) {
         if(!empty($data['search'])) {
             $db = $db->where('id|nickname', 'like', '%'.$data['search'].'%');
         }
-        return $db->order('id DESC');
+        return $db->order('id DESC')->append(['status_text']);
     }
 
 }
