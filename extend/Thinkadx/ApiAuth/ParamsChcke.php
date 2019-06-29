@@ -101,9 +101,15 @@ class ParamsChcke {
             }
         }
 
-        array_walk($data, function(&$val, $key) {
-            $val = urldecode($val);
-        });
+        try {
+            array_walk($data, function(&$val, $key) {
+                $val = urldecode($val);
+            });
+        } catch (\think\exception\ErrorException $e) {
+            // return '提交数据只支持数字(整数、浮点)、字符串';
+            return '检测到非法数据类型';
+        }
+        
         ksort($data);
         $signData = http_build_query($data);
         if(self::$appsecret) {

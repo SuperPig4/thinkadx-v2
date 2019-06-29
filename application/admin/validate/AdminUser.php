@@ -34,7 +34,9 @@ class AdminUser extends Validate
         // 状态
         'status' => 'check_status',
         // 新增时的密码
-        'add_data_password' => 'check_add_data_password'
+        'add_data_password' => 'check_add_data_password',
+        // 删除ID
+        'delete_id' => 'require|check_delete_id'
     ];
     
     protected $message = [
@@ -53,11 +55,12 @@ class AdminUser extends Validate
         'group_id' => '请选择分组',
         'nickname' => '请输入昵称',
         'nickname.min' => '昵称最少5个字',
-        'nickname.max' => '昵称最多30个字'
+        'nickname.max' => '昵称最多30个字',
+        'delete_id' => '请选择删除数据'
     ];
 
     protected $scene = [
-        'delete' => ['id'],
+        'delete' => ['delete_id'],
         'add_edit' => ['avatar', 'group_id', 'nickname', 'status', 'access'],
         'detail' => ['id'],
         'index' => ['p'],
@@ -91,6 +94,25 @@ class AdminUser extends Validate
         } else {
             return true;
         }
+    }
+
+    protected function check_delete_id($value) {
+        if(!empty($value)) {
+            if(!is_numeric($value)) {
+                $temp = json_decode($value);
+                if(is_array($temp)) {
+                    foreach($temp as $val) {
+                        if(!is_numeric($val)) {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+            } else {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

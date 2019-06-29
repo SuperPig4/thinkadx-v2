@@ -26,21 +26,41 @@ class AdminUser extends Base {
     // 重写删除
     public function delete() {
         $data = $this->request->param();
-        if($data['id'] == 1) {
-            error('超级管理员无法删除');
+        if(!is_numeric($data['delete_id'])) {
+            $data['delete_id'] = json_decode($data['delete_id']);
+            foreach($data['delete_id'] as $val) {
+                if($val == 1) {
+                    error('超级管理员无法删除');
+                }
+            }
+        } else {
+            if($data['delete_id'] == 1) {
+                error('超级管理员无法删除');
+            }
         }
 
         Db::startTrans();
-        $info = Admin::get($data['id']);
-        if($info->adminOauth()->where('admin_id',$data['id'])->delete()) {
-            if($info->delete()) {
-                Db::commit();
-                $this->request->act_log = $this->logs['delete'];
-                success('操作成功');
+        $info = Admin::all($data['delete_id']);
+        foreach ($info as $key => $value) {
+            if($value->adminOauth()->where('admin_id',$value['id'])->delete()) {
+                if($value->delete() === false) {
+                    $isError = true;
+                    break;
+                }
             }
         }
-        Db::rollback();
-        error('操作失败');
+        if(!isset($isError)) {
+            if(is_array($data['delete_id'])) {
+                $this->request->act_log = '批量删除了管理员';
+            } else {
+                $this->request->act_log = '删除了管理员';
+            }
+            Db::commit();
+            success('操作成功');
+        } else {
+            Db::rollback();
+            error('操作失败');
+        }
     }
 
 
