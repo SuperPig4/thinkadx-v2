@@ -18,8 +18,7 @@ class AdminUser extends Base {
 
     protected $logs = [
         'add' => '新增了管理员信息',
-        'edit' => '编辑了管理员信息',
-        'delete' => '删除了管理员'
+        'edit' => '编辑了管理员信息'
     ];
 
 

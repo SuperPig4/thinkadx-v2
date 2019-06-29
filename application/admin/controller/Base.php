@@ -50,12 +50,11 @@ class Base extends Controller {
         if(empty($actionIsHave)) {
             error('illegal action');
         }
-       
+        
         if(!empty($this->validateName)) {
             $name = $this->validateName === true ? $this->request->controller() : $this->validateName;
             define('Validate_Name', $name);
         }
-
     }
 
 
@@ -169,19 +168,18 @@ class Base extends Controller {
             $table = empty($this->table) ? $this->request->controller(true) : $this->table;
             $db = Db::name($table);
         }
-        $db->where('id', 'in', $params['id'])->delete();
-        
-        if(isset($this->logs)) {
-            if(isset($params['id'])) {
-                $log = $this->logs['edit'];
-            } else {
-                $log = $this->logs['add'];
+
+        $deleteStatus = $db->where('id', 'in', $params['id'])->delete();
+        if($deleteStatus === false) {
+            error('删除失败');
+        } else {
+            if(isset($this->logs)) {
+                if(isset($this->logs['delete'])) {
+                    $this->request->act_log = $this->logs['delete'];
+                }
             }
-            if(!empty($log)) {
-                $this->request->act_log = $log;
-            }
+            success('操作成功');
         }
-        success('操作成功');
     }
 
 

@@ -103,7 +103,11 @@ class ParamsChcke {
 
         try {
             array_walk($data, function(&$val, $key) {
-                $val = urldecode($val);
+                if(is_array($val)) {
+                    $val = urldecode(json_encode($val));
+                } else {
+                    $val = urldecode($val);
+                }
             });
         } catch (\think\exception\ErrorException $e) {
             // return '提交数据只支持数字(整数、浮点)、字符串';
