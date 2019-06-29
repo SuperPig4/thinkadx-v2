@@ -84,7 +84,7 @@ class Base extends Controller {
             // 判断是否需要分页
             if(!isset($params['all'])) {
                 $db->limit(25)->page(
-                    (isset($params['p'])  ? $params : 1)
+                    (isset($params['p'])  ? $params['p'] : 1)
                 );
             }
             success('ok!', $db->select());

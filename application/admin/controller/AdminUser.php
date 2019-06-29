@@ -18,11 +18,33 @@ class AdminUser extends Base {
 
     protected $logs = [
         'add' => '新增了管理员信息',
-        'edit' => '编辑了管理员信息'
+        'edit' => '编辑了管理员信息',
+        'delete' => '删除了管理员'
     ];
 
 
-    // 重新编辑增加
+    // 重写删除
+    public function delete() {
+        $data = $this->request->param();
+        if($data['id'] == 1) {
+            error('超级管理员无法删除');
+        }
+
+        Db::startTrans();
+        $info = Admin::get($data['id']);
+        if($info->adminOauth()->where('admin_id',$data['id'])->delete()) {
+            if($info->delete()) {
+                Db::commit();
+                $this->request->act_log = $this->logs['delete'];
+                success('操作成功');
+            }
+        }
+        Db::rollback();
+        error('操作失败');
+    }
+
+
+    // 重写编辑增加
     public function add_edit() {
         $data = $this->request->param();
         if(empty($data['id'])) {
