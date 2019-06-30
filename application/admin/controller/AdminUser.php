@@ -49,11 +49,7 @@ class AdminUser extends Base {
             }
         }
         if(!isset($isError)) {
-            if(is_array($data['delete_id'])) {
-                $this->request->act_log = '批量删除了管理员';
-            } else {
-                $this->request->act_log = '删除了管理员';
-            }
+            $this->request->act_log = '删除了管理员';
             Db::commit();
             success('操作成功');
         } else {

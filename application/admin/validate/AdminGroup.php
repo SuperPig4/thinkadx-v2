@@ -30,8 +30,6 @@ class AdminGroup extends Validate {
 
     // 自定义场景
     protected function sceneDelete() {
-        $id = request()->param('id/a');
-        
         return $this->only(['id'])
         ->append('id', 'check_id_use')
         ->remove('id', 'number');
@@ -49,7 +47,9 @@ class AdminGroup extends Validate {
 
             foreach($ids as $item) {
                 if($item == 1) {
-                    return '1号分组禁止删除';
+                    return 'id为1的分组禁止删除';
+                } else if(!is_numeric($item)) {
+                    return '参数非法';
                 }
             }
 

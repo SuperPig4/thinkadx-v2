@@ -8,7 +8,6 @@ class AdminGroup extends Model {
     
     protected $autoWriteTimestamp  = true;
     protected $updateTime   = false;
-    protected $createTime = 'create_time';
     
     public function admin() {
         return $this->hasMany('admin', 'group_id');
