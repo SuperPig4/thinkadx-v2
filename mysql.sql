@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : 127.0.0.1
+ Source Server         : 我的腾讯云服务器
  Source Server Type    : MySQL
- Source Server Version : 50553
- Source Host           : localhost:3306
- Source Schema         : thinkadx-v2
+ Source Server Version : 50562
+ Source Host           : 118.24.221.147:3306
+ Source Schema         : thinkadx-v
 
  Target Server Type    : MySQL
- Target Server Version : 50553
+ Target Server Version : 50562
  File Encoding         : 65001
 
- Date: 04/06/2019 13:11:22
+ Date: 02/07/2019 18:59:08
 */
 
 SET NAMES utf8mb4;
@@ -27,11 +27,17 @@ CREATE TABLE `tx_admin`  (
   `avatar` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户头像 相对路径',
   `nickname` varchar(34) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户名',
   `access` varchar(34) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '账号',
+  `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '状态 0:暂停 1:正常',
   `create_time` int(11) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id`) USING BTREE,
   INDEX `group_id`(`group_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '管理员列表' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '管理员列表' ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of tx_admin
+-- ----------------------------
+INSERT INTO `tx_admin` VALUES (1, 1, '', '超级管理员', 'admin', 0, 1562056804);
 
 -- ----------------------------
 -- Table structure for tx_admin_group
@@ -44,14 +50,19 @@ CREATE TABLE `tx_admin_group`  (
   `rules` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '规则ID 用,分隔',
   `create_time` int(11) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '管理员权限分组表' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '管理员权限分组表' ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of tx_admin_group
+-- ----------------------------
+INSERT INTO `tx_admin_group` VALUES (1, '所有权限', 1, '1', 1562056803);
 
 -- ----------------------------
 -- Table structure for tx_admin_log
 -- ----------------------------
 DROP TABLE IF EXISTS `tx_admin_log`;
 CREATE TABLE `tx_admin_log`  (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `admin_id` int(11) NOT NULL,
   `des` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '操作描述',
   `ip` varchar(24) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
@@ -61,7 +72,7 @@ CREATE TABLE `tx_admin_log`  (
   `other_info` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '其他信息',
   `act_time` int(11) NOT NULL COMMENT '操作时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '管理员操作表' ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '管理员操作表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for tx_admin_menu
@@ -70,15 +81,27 @@ DROP TABLE IF EXISTS `tx_admin_menu`;
 CREATE TABLE `tx_admin_menu`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `icon` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '菜单栏图标文件路径',
-  `name` varchar(24) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `module` varchar(24) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `controller` varchar(24) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `action` varchar(24) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `title` varchar(34) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `module` varchar(34) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `controller` varchar(34) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `action` varchar(34) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `status` tinyint(1) NOT NULL COMMENT '是否显示 0:不显示 1:显示',
-  `create_time` int(11) NOT NULL,
   `father_id` int(11) NOT NULL DEFAULT 0 COMMENT '上级id',
+  `create_time` int(11) NOT NULL COMMENT '操作时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '管理员菜单表' ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '管理员菜单表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of tx_admin_menu
+-- ----------------------------
+INSERT INTO `tx_admin_menu` VALUES (1, '/uploads/system_default_icon/system_setup.png', '系统设置', ' ', ' ', ' ', 1, 0, 1561317212);
+INSERT INTO `tx_admin_menu` VALUES (2, '', '菜单设置', 'admin', 'menu', 'index', 1, 1, 1561317862);
+INSERT INTO `tx_admin_menu` VALUES (3, '/uploads/system_default_icon/admin_manage.png', '管理员管理', '', '', '', 1, 0, 1561356111);
+INSERT INTO `tx_admin_menu` VALUES (4, '', '管理员列表', 'admin', 'admin_user', 'index', 1, 3, 1561398603);
+INSERT INTO `tx_admin_menu` VALUES (5, '', '管理员分组', 'admin', 'admin_group', 'index', 1, 3, 1561776003);
+INSERT INTO `tx_admin_menu` VALUES (6, '', '分组规则', 'admin', 'admin_rule', 'index', 1, 3, 1561847710);
+INSERT INTO `tx_admin_menu` VALUES (7, '', '系统配置', 'admin', 'config', 'index', 1, 1, 1562012009);
+INSERT INTO `tx_admin_menu` VALUES (8, '', '管理员操作日志', 'admin', 'admin_log', 'index', 1, 1, 1562025198);
 
 -- ----------------------------
 -- Table structure for tx_admin_oauth
@@ -101,7 +124,12 @@ CREATE TABLE `tx_admin_oauth`  (
   INDEX `admin_id`(`admin_id`) USING BTREE,
   INDEX `access_token`(`access_token`) USING BTREE,
   INDEX `refresh_token`(`refresh_token`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '第三方授权表 - 每条数据都有自己的 access_token和refresh_token 都是相对的' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '第三方授权表 - 每条数据都有自己的 access_token和refresh_token 都是相对的' ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of tx_admin_oauth
+-- ----------------------------
+INSERT INTO `tx_admin_oauth` VALUES (1, 1, '3b1f1f4eafccab421abac7b9bfe056b6', '738607423', 'pwd', 'api', 'be55300e2c5c9f4a43765589d8f9ba46', '02a8473d790f5a628980ec3baf2c2add', '', 1562056820, 1562056821, 1562056804);
 
 -- ----------------------------
 -- Table structure for tx_admin_rule
@@ -113,6 +141,34 @@ CREATE TABLE `tx_admin_rule`  (
   `des` varchar(124) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '规则描述',
   `create_time` int(11) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '管理员权限规则表' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '管理员权限规则表' ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of tx_admin_rule
+-- ----------------------------
+INSERT INTO `tx_admin_rule` VALUES (1, '*/*:*', '所有权限', 1562056803);
+
+-- ----------------------------
+-- Table structure for tx_config
+-- ----------------------------
+DROP TABLE IF EXISTS `tx_config`;
+CREATE TABLE `tx_config`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(34) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '配置名',
+  `alias` varchar(34) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '别名',
+  `type` varchar(34) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '配置分类',
+  `value` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '内容',
+  `description` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '描述',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `name`(`name`) USING BTREE,
+  INDEX `alias`(`alias`) USING BTREE
+) ENGINE = MyISAM AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '配置' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of tx_config
+-- ----------------------------
+INSERT INTO `tx_config` VALUES (1, '管理员访问令牌周期', 'admin_access_token_time_out', 'system', '7200', '秒位单位');
+INSERT INTO `tx_config` VALUES (2, '管理员刷新令牌周期', 'admin_refresh_token_time_out', 'system', '604800', '秒位单位');
+INSERT INTO `tx_config` VALUES (3, '后台系统名称', 'admin_system_name', 'system', '某某管理系统', '后台系统名称');
 
 SET FOREIGN_KEY_CHECKS = 1;

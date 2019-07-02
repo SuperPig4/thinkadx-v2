@@ -30,8 +30,9 @@ function validate_file_url($url) {
  * @return string
  */
 function local_path_turn_url($path, $host = '') {
+    if(empty($path)) return '';
+
     $path = str_replace('\\','/',$path);
-    
     if(empty($hots)) {
         $request = request();
         $host = $request->domain();

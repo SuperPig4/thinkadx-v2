@@ -15,7 +15,11 @@ class AdminGroup extends Model {
 
     // 修改器
     public function setRulesAttr($value) {
-        return implode(',',$value);
+        if(is_array($value)) {
+            return implode(',',$value);
+        } else {
+            return $value;
+        }
     }
 
     // 获取器
