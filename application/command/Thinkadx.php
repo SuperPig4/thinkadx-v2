@@ -54,7 +54,7 @@ class Thinkadx extends Command
                         // 创建系统资源
                         $output->writeln('create resources ...');
                         $this->createDefaultIcon($output);
-
+                        $output->writeln('init success!!!');
                     break;
             }
         }
