@@ -15,6 +15,11 @@ class Admin extends Model {
     }
 
 
+    public function adminLog() {
+        return $this->hasMany('AmindLog', 'admin_id');
+    }
+
+
     // 获取器
     public function getAvatarAttr($value, $data) {
         if(empty($value)) {

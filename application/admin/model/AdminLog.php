@@ -11,6 +11,11 @@ class AdminLog extends Model {
 
     protected $insert = ['admin_id', 'ip', 'module', 'controller', 'action'];  
 
+    public function admin() {
+        return $this->belongsTo('admin');
+    } 
+
+
     protected function setAdminIdAttr() {
         return USER_ID;
     }
@@ -30,5 +35,6 @@ class AdminLog extends Model {
     protected function setActionAttr() {
         return request()->action(true);
     }
+
 
 }
