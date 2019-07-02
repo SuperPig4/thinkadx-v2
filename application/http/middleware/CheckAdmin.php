@@ -48,7 +48,8 @@ class CheckAdmin extends Controller {
         $ignoreList = [
             'Index' => ['index'],
             'AdminUser' => ['login', 'rese_token'],
-            'Upload' => ['index']
+            'Upload' => ['index'],
+            'Config' => ['get_system_config']
         ];
         $result = ['code'=>0, 'msg'=>'未知错误', 'data'=>['errorCode'=>0]];
         $ignoreAr = [];

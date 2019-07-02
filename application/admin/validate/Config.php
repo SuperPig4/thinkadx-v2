@@ -37,6 +37,7 @@ class Config extends Validate
 
 
     protected $scene = [
+        'get_system_config' => [''],
         'add_edit' => ['name', 'alias', 'type', 'description'],
         'detail' => ['id'],
         'index' => ['p'],

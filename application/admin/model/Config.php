@@ -11,6 +11,7 @@ class Config extends Model {
         self::event('after_write', function($e){
             // 清空配置缓存
             Cache::clear('system_config');
+            Cache::rm('controller_get_all_config');
         });
     }
 

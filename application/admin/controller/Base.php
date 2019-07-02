@@ -37,14 +37,6 @@ class Base extends Controller {
 
     public function __construct() {
         parent::__construct();
-      
-        if($this->request->param('test')) {
-            // var_dump(Cache::get('temp_token_admin_access_afdaf07662eada68dc66a48dccf702a7'));
-            $key = 'd49c668c4b8696cfd9e05be062d463ea';
-            echo Cache::rm('admin_access_'.$key);
-            exit();
-        }
-        
         //验证方法是否存在
         $actionIsHave = method_exists($this, $this->request->action());
         if(empty($actionIsHave)) {
