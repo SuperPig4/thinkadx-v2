@@ -64,7 +64,7 @@ class AdminUser extends Validate
         'add_edit' => ['avatar', 'group_id', 'nickname', 'status', 'access'],
         'detail' => ['id'],
         'index' => ['p'],
-        'login' => ['access', 'oauth_type', 'port_type', 'password'],
+        'login' => ['access', 'oauth_type', 'port_type'],
         'info' => [''],
         'rese_token' => ['refresh_token', 'old_token'],
         'set_password' => ['oauth_type', 'port_type', 'new_password','id']
