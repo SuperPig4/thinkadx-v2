@@ -215,22 +215,24 @@ class AdminUser extends Base {
     // 登陆
     public function login() {
         $data = $this->request->param();
+        $result = $this->validate($data, 'app\admin\validate\Login.'. $data['port_type'] . '_' . $data['oauth_type']);
+        if($result !== true) {
+            error($result);
+        }
+
         $user = admin::where('access', $data['access'])->find();
         if(empty($user)) {
             error('请输入正确的账号');
         } else {
-
             $oauth = $user->adminOauth()->where([
                 'port_type' => $data['port_type'],
                 'oauth_type' => $data['oauth_type']
             ])->find();
-
             if(is_null($oauth)) {
                 error('登陆失败');
             } else {
                 $loginResult = $oauth->login();
             }
-            
             if(is_array($loginResult)) {
                 define('USER_ID', $oauth->admin_id);
                 $this->request->act_log = '登陆成功';
@@ -238,7 +240,6 @@ class AdminUser extends Base {
             } else {
                 error($loginResult);
             }
-
         }
     }
 
