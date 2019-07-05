@@ -181,7 +181,12 @@ class Base extends Controller {
      */
     private function get_model() {
         if(isset($this->modelName)) {
-            $modelPath = strtolower($this->modelName.'.php');
+            // 检测是否直接实例化
+            if(strstr($this->modelName, '\\') !== false) {
+                return new $this->modelName();
+            } else {
+                $modelPath = strtolower($this->modelName.'.php');
+            }
         } else {
             $modelPath = strtolower($this->request->controller(true).'.php');
         }
