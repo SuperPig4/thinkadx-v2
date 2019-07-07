@@ -153,15 +153,18 @@ class Base extends Controller {
     public function delete() {
         $params = $this->get_params();
         if(empty($this->table)) {
-            $db = $this->get_model();
+            $model = $this->get_model();
+            if(!empty($model)) {
+                $deleteStatus = $model->destroy($params['id']);
+            }
         }
         
-        if(empty($db)) {
+        if(empty($model)) {
             $table = empty($this->table) ? $this->request->controller(true) : $this->table;
             $db = Db::name($table);
+            $deleteStatus = $db->where('id', 'in', $params['id'])->delete();
         }
-
-        $deleteStatus = $db->where('id', 'in', $params['id'])->delete();
+        
         if($deleteStatus === false) {
             error('删除失败');
         } else {

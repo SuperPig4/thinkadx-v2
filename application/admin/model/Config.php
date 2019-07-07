@@ -8,11 +8,13 @@ use think\Model;
 class Config extends Model {
     
     public static function init() {
-        self::event('after_write', function($e){
+        $callback = function(){
             // 清空配置缓存
             Cache::clear('system_config');
             Cache::rm('controller_get_all_config');
-        });
+        };
+        self::event('after_write', $callback);
+        self::event('after_delete', $callback);
     }
 
 
