@@ -3,7 +3,7 @@
 namespace app\admin\controller;
 use think\Controller;
 use think\Response;
-use think\Facade\Cache;
+use think\facade\Cache;
 use think\Db;
 
 class Base extends Controller {

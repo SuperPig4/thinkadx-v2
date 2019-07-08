@@ -3,6 +3,7 @@ namespace Thinkadx\RuleAuth;
 use think\Db;
 use think\facade\Cache;
 use think\facade\Request;
+use Thinkadx\RuleAuth\Rule\Standard;
 
 /**
  * 注意

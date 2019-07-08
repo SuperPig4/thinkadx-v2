@@ -1,24 +1,29 @@
 <?php
 namespace app\common\behavior;
-use think\Facade\Request;
-use think\Facade\Response;
+use think\facade\Request;
+use think\facade\Response;
 
 class CorsRun {
     public function appInit(){
-        
-        Response::header([
-            'Access-Control-Allow-Headers' => '*',
-            'Access-Control-Max-Age' => '600',
-            'Access-Control-Allow-Origin' => '*'
-        ])->send();
         if(Request::isOptions()){
+            Response::header([
+                'Access-Control-Allow-Headers' => '*',
+                'Access-Control-Max-Age' => '600',
+                'Access-Control-Allow-Origin' => '*'
+            ])->send();
             exit();
         }
-
         // 检测来源域名
         // $info = request::header();
         // if($info['host'] != 'www.thinkadx-v2.cn') {
         //     throw new \think\exception\HttpException(404, 'header域名不匹配');
         // }
+    }
+
+
+    public function appEnd($response){
+        $response->header('Access-Control-Allow-Headers', '*');
+        $response->header('Access-Control-Max-Age', '600');
+        $response->header('Access-Control-Allow-Origin', '*');
     }
 }

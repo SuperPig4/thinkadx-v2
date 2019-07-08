@@ -26,5 +26,7 @@ return [
     // 日志写入
     'log_write'    => [],
     // 应用结束
-    'app_end'      => [],
+    'app_end'      => [
+        'app\\common\\behavior\\CorsRun'
+    ],
 ];

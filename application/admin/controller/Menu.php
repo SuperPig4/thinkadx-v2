@@ -1,6 +1,6 @@
 <?php
 namespace app\admin\controller;
-use think\Facade\Request;
+use think\facade\Request;
 use app\admin\model\AdminMenu;
 use Thinkadx\RuleAuth\Main;
 
