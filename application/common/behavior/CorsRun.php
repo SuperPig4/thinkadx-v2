@@ -7,7 +7,7 @@ class CorsRun {
     public function appInit(){
         if(Request::isOptions()){
             Response::header([
-                'Access-Control-Allow-Headers' => '*',
+                'Access-Control-Allow-Headers' => 'content-type, nonce, sign, timestamp, token',
                 'Access-Control-Max-Age' => '600',
                 'Access-Control-Allow-Origin' => '*'
             ])->send();
@@ -22,7 +22,7 @@ class CorsRun {
 
 
     public function appEnd($response){
-        $response->header('Access-Control-Allow-Headers', '*');
+        $response->header('Access-Control-Allow-Headers', 'content-type, nonce, sign, timestamp, token');
         $response->header('Access-Control-Max-Age', '600');
         $response->header('Access-Control-Allow-Origin', '*');
     }
