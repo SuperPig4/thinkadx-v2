@@ -26,7 +26,6 @@ class AdminUser extends Base {
     public function delete() {
         $data = $this->request->param();
         if(!is_numeric($data['delete_id'])) {
-            $data['delete_id'] = json_decode($data['delete_id']);
             foreach($data['delete_id'] as $val) {
                 if($val == 1) {
                     error('超级管理员无法删除');

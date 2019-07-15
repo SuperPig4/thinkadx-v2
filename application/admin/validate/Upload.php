@@ -10,7 +10,7 @@ class Upload extends Validate {
         // 上传文件
         'image' => 'requireCallback:check_image',
         // 文件夹路径
-        'path' => 'require|in:menu_icon,admin_avatar'
+        'path' => 'require|in:menu_icon,admin_avatar,default'
     ];  
     
     protected $message = [

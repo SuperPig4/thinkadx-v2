@@ -99,9 +99,8 @@ class AdminUser extends Validate
     protected function check_delete_id($value) {
         if(!empty($value)) {
             if(!is_numeric($value)) {
-                $temp = json_decode($value);
-                if(is_array($temp)) {
-                    foreach($temp as $val) {
+                if(is_array($value)) {
+                    foreach($value as $val) {
                         if(!is_numeric($val)) {
                             return false;
                         }
