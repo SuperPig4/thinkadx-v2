@@ -141,46 +141,55 @@ class AdminUser extends Base {
     public function rese_token() {
         $oldToken = $this->request->param('old_token/s');
         $refreshToken = $this->request->param('refresh_token/s');
-
         $accessTokenKey = 'admin_access_'.$oldToken;
         $refreshTokenKey = 'admin_refresh_'.$refreshToken;
 
         $accessValue = Cache::get($accessTokenKey);
         $refreshValue = Cache::get($refreshTokenKey);
-
+       
         if($refreshValue) {
             if($accessValue && $accessValue == $refreshValue) {
                 success('ok!',[
                     'expired' => system_config('system.admin_access_token_time_out'),
                     'token' => $oldToken
                 ]);
+            } else if($refreshValue == 'temp') {
+                // 白名单状态
+                error('您的账号在其他地方登陆了', ['errorCode'=>-1002]);
             } else if(empty($accessValue)) {
                 //检测是否临时白名单中
-                $tempTokenInfo = Cache::get('temp_token_'.$accessTokenKey);
-                if($tempTokenInfo && $tempTokenInfo['refresh_token'] == $refreshToken) {
-                    success('ok!',[
-                        'expired' => system_config('system.admin_access_token_time_out'),
-                        'token' => $tempTokenInfo['access_token']
-                    ]);
-                } else if(empty($tempTokenInfo)) {
+                $checkTokenTemp = function() use ($accessTokenKey, $refreshToken) {
+                    $tempTokenInfo = Cache::get('temp_token_'.$accessTokenKey);
+                    if($tempTokenInfo && $tempTokenInfo['refresh_token'] == $refreshToken) {
+                        return [
+                            'expired' => system_config('system.admin_access_token_time_out'),
+                            'token' => $tempTokenInfo['access_token']
+                        ];
+                    } else {
+                        if(empty($tempTokenInfo)) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                };
+
+                $checkRes = $checkTokenTemp();
+                if($checkRes === true) {
                     //进行数据库级的查询
                     Db::startTrans();
                     $oauth = AdminOauth::where('refresh_token', $refreshToken)->lock(true)->find();
                     if(!empty($oauth)) {
                         //第二次检测是否在临时缓存中
-                        $tempTokenInfo = Cache::get('temp_token_'.$accessTokenKey);
-                        if($tempTokenInfo && $tempTokenInfo['refresh_token'] == $refreshToken) {
-                            Db::commit();
-                            success('ok!',[
-                                'expired' => system_config('system.admin_access_token_time_out'),
-                                'token' => $tempTokenInfo['access_token']
-                            ]);
-                        } else if(empty($tempTokenInfo)) {
+                        $checkRes = $checkTokenTemp();
+                        if($checkRes !== false) {
+                            $runData = ['code'=>0, 'msg'=>'error', 'data'=>[]];
+                        }
+                        if($checkRes === true) {
                             if($oauth->last_use_access_token == $oldToken) {
-                                Db::commit();
-                                error('您的账号在其他地方登陆了', ['errorCode'=>-1002]);
+                                $runData['msg'] = '您的账号在其他地方登陆了';
+                                $runData['data'] = ['errorCode'=>-1002];
                             } else if($oauth->access_token == $oldToken) {
-
                                 //正式进入刷新逻辑
                                 $newToken = $oauth->resetToken('access');
                                 Cache::tag('admin_temp_token')->set('temp_token_'.$accessTokenKey, [
@@ -188,15 +197,29 @@ class AdminUser extends Base {
                                     'refresh_token' => $refreshToken,
                                     'user_id' => $oauth->admin_id
                                 ], 600);
-                                Db::commit();
-                                success('ok!',[
+                                $runData['code'] = 1;
+                                $runData['msg'] = 'ok!';
+                                $runData['data'] = [
                                     'expired' => system_config('system.admin_access_token_time_out'),
                                     'token' => $newToken['token']
-                                ]);
+                                ];
                             }
+                        } else if(is_array($checkRes)){
+                            $runData['code'] = 1;
+                            $runData['msg'] = 'ok!';
+                            $runData['data'] = $checkRes;
                         }
                     }
                     Db::commit();
+                    if(isset($runData)) {
+                        if($runData['code']) {
+                            success($runData['msg'], $runData['data']);
+                        } else {
+                            error($runData['msg'], $runData['data']);
+                        }
+                    }
+                } else if(is_array($checkRes)){
+                    success('ok!',$checkRes);
                 }
             }
         } 

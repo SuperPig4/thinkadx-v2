@@ -79,10 +79,15 @@ class AdminOauth extends Model {
 
         if($token && $isDelOld === true) {
             // 如果是访问令牌,则记录本次刷新
+            $oldCacheKey = 'admin_'.$tokenType.'_'.$token;
             if($tokenType == 'access') {
                 $updateData['last_use_access_token'] = $this->getAttr('access_token');
+                Cache::rm($oldCacheKey); 
+            } else {
+                if(!empty(Cache::get($oldCacheKey))) {
+                    Cache::set($oldCacheKey,'temp',system_config('system.admin_access_token_time_out'));
+                }
             }
-            Cache::rm('admin_'.$tokenType.'_'.$token); 
         }
         $this->save($updateData);
         Cache::tag('admin_token')->set('admin_'.$tokenType.'_'.$newToken, $this->getAttr('admin_id'), $tokenTimeOut);

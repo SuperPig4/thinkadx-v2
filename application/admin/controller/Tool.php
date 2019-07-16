@@ -43,9 +43,8 @@ class Tool extends Controller {
 
     // 清空过期缓存
     public function empty_expired_cache() {
-        // 清空过期缓存
         $path = Container::get('app')->getRuntimePath() . 'cache' . DIRECTORY_SEPARATOR;
-        $files = (array) glob($path . (config('cache.prefix') ? config('cache.prefix') . DIRECTORY_SEPARATOR : '') . '*');
+        $files = (array) glob($path . (config('cache.default.prefix') ? config('cache.default.prefix') . DIRECTORY_SEPARATOR : '') . '*');
         foreach ($files as $path) {
             if (is_dir($path)) {
                 $matches = glob($path . DIRECTORY_SEPARATOR . '*.php');
