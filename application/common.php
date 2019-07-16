@@ -25,6 +25,49 @@ function del_expired_file_cache($filename) {
 
 
 /**
+ * 发送请求
+ * @param  char  $sendType 发送类型 post/get
+ * @param  char  $url      发送地址
+ * @param  char/array  $param    发送参数
+ * @return array   
+ */
+function send_http($url, $sendType, $param = '') {
+	//初始化 curl
+	$curl = curl_init(); 
+    
+	//判断发送请求地址是否为https
+    $urlParams = parse_url($url);
+    //关闭https证书验证
+	if($urlParams['scheme'] == 'https') {
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+	}
+
+	//设置网站
+	curl_setopt($curl, CURLOPT_URL, $url); 
+	//不输出包头
+	curl_setopt($curl,CURLOPT_HEADER,0);
+	//不输出包头
+	curl_setopt($curl,CURLOPT_RETURNTRANSFER,1); 
+
+	//判断请求是否为post
+	if($sendType == 'post') {
+		curl_setopt($curl,CURLOPT_POST,1);
+	}
+
+    //传输参数
+	if(!empty($param)) {
+		curl_setopt($curl, CURLOPT_SAFE_UPLOAD, false);
+		curl_setopt($curl,CURLOPT_POSTFIELDS,$param); 
+	}
+	
+	$data = curl_exec($curl);
+	curl_close($curl);
+	return $data;
+}
+
+
+/**
  * 验证文件URL是否为本站
  */
 function validate_file_url($url) {

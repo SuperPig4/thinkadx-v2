@@ -11,7 +11,7 @@
  Target Server Version : 50562
  File Encoding         : 65001
 
- Date: 02/07/2019 18:59:08
+ Date: 16/07/2019 16:33:26
 */
 
 SET NAMES utf8mb4;
@@ -72,7 +72,12 @@ CREATE TABLE `tx_admin_log`  (
   `other_info` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '其他信息',
   `act_time` int(11) NOT NULL COMMENT '操作时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '管理员操作表' ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '管理员操作表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of tx_admin_log
+-- ----------------------------
+INSERT INTO `tx_admin_log` VALUES (1, 1, '登陆成功', '127.0.0.1', 'admin', 'adminuser', 'login', '', 1563265888);
 
 -- ----------------------------
 -- Table structure for tx_admin_menu
@@ -89,19 +94,20 @@ CREATE TABLE `tx_admin_menu`  (
   `father_id` int(11) NOT NULL DEFAULT 0 COMMENT '上级id',
   `create_time` int(11) NOT NULL COMMENT '操作时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '管理员菜单表' ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '管理员菜单表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tx_admin_menu
 -- ----------------------------
-INSERT INTO `tx_admin_menu` VALUES (1, '/uploads/system_default_icon/system_setup.png', '系统设置', ' ', ' ', ' ', 1, 0, 1561317212);
+INSERT INTO `tx_admin_menu` VALUES (1, '/uploads/menu_icon/5c/7710c57f905aff97c52ce5100a58e4.png', '系统设置', ' ', ' ', ' ', 1, 0, 1561317212);
 INSERT INTO `tx_admin_menu` VALUES (2, '', '菜单设置', 'admin', 'menu', 'index', 1, 1, 1561317862);
-INSERT INTO `tx_admin_menu` VALUES (3, '/uploads/system_default_icon/admin_manage.png', '管理员管理', '', '', '', 1, 0, 1561356111);
+INSERT INTO `tx_admin_menu` VALUES (3, '/uploads/menu_icon/65/b18ee16c1c4088faba0088753ec39b.png', '管理员管理', '', '', '', 1, 0, 1561356111);
 INSERT INTO `tx_admin_menu` VALUES (4, '', '管理员列表', 'admin', 'admin_user', 'index', 1, 3, 1561398603);
 INSERT INTO `tx_admin_menu` VALUES (5, '', '管理员分组', 'admin', 'admin_group', 'index', 1, 3, 1561776003);
 INSERT INTO `tx_admin_menu` VALUES (6, '', '分组规则', 'admin', 'admin_rule', 'index', 1, 3, 1561847710);
 INSERT INTO `tx_admin_menu` VALUES (7, '', '系统配置', 'admin', 'config', 'index', 1, 1, 1562012009);
 INSERT INTO `tx_admin_menu` VALUES (8, '', '管理员操作日志', 'admin', 'admin_log', 'index', 1, 1, 1562025198);
+INSERT INTO `tx_admin_menu` VALUES (9, '', '过期缓存清除', 'admin', 'tool', 'empty_expired_cache', 1, 1, 1562025198);
 
 -- ----------------------------
 -- Table structure for tx_admin_oauth
@@ -129,7 +135,7 @@ CREATE TABLE `tx_admin_oauth`  (
 -- ----------------------------
 -- Records of tx_admin_oauth
 -- ----------------------------
-INSERT INTO `tx_admin_oauth` VALUES (1, 1, '3b1f1f4eafccab421abac7b9bfe056b6', '738607423', 'pwd', 'api', 'be55300e2c5c9f4a43765589d8f9ba46', '02a8473d790f5a628980ec3baf2c2add', '', 1562056820, 1562056821, 1562056804);
+INSERT INTO `tx_admin_oauth` VALUES (1, 1, '3b1f1f4eafccab421abac7b9bfe056b6', '738607423', 'pwd', 'api', '8ff9eee93f4d2154899215604d99b6b2', '8587c6b56657c720ada5073233519961', 'be55300e2c5c9f4a43765589d8f9ba46', 1563265887, 1563265888, 1562056804);
 
 -- ----------------------------
 -- Table structure for tx_admin_rule
