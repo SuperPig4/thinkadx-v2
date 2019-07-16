@@ -73,7 +73,7 @@ class ParamsChcke {
      * 使用重放字符串
      */
     private static function useNonce() {
-        Cache::set(self::$nonce, '5', self::$apiTimeOut);
+        Cache::set(self::$nonce, time(), self::$apiTimeOut);
     }
 
 
