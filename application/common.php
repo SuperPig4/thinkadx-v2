@@ -9,6 +9,20 @@
 // | Author: 流年 <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 
+/**
+ * 删除过期的file缓存
+ */
+function del_expired_file_cache($filename) {
+    $content      = file_get_contents($filename);
+    if (false !== $content) {
+        $expire = (int) substr($content, 8, 12);
+        if (0 != $expire && time() > filemtime($filename) + $expire) {
+            //缓存过期删除缓存文件
+            is_file($filename) && unlink($filename);
+        }
+    }
+}
+
 
 /**
  * 验证文件URL是否为本站

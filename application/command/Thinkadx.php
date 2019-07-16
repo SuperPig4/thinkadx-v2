@@ -13,6 +13,7 @@ use app\admin\model\Admin;
 use app\admin\model\AdminOauth;
 use app\admin\model\AdminGroup;
 use app\admin\model\AdminRule;
+use think\Container;
 
 class Thinkadx extends Command
 {
@@ -20,6 +21,7 @@ class Thinkadx extends Command
         // 指令配置
         $this->setName('thinkadx')
         ->addOption('init', null, Option::VALUE_REQUIRED, 'init action')
+        ->addOption('action', null, Option::VALUE_REQUIRED, 'action name')
         ->setDescription('thinkadx');
     }
 
@@ -55,6 +57,29 @@ class Thinkadx extends Command
                         $output->writeln('create resources ...');
                         $this->createDefaultIcon($output);
                         $output->writeln('init success!!!');
+                    break;
+            }
+        } else if($input->hasOption('action')) {
+            // 操作
+            $initType = $input->getOption('action');
+            switch($initType) {
+                case 'empty_expired_cache' : 
+                        // 清空过期缓存
+                        $path = Container::get('app')->getRuntimePath() . 'cache' . DIRECTORY_SEPARATOR;
+                        $files = (array) glob($path . (config('cache.prefix') ? config('cache.prefix') . DIRECTORY_SEPARATOR : '') . '*');
+                        foreach ($files as $path) {
+                            if (is_dir($path)) {
+                                $matches = glob($path . DIRECTORY_SEPARATOR . '*.php');
+                                array_map('del_expired_file_cache', $matches);
+                                // 文件夹为空则删除
+                                if(empty(array_diff(scandir($path),array('..','.')))) {
+                                    rmdir($path);
+                                }
+                            } else {
+                                del_expired_file_cache($path);
+                            }
+                        }
+                        $output->writeln('action success');
                     break;
             }
         }

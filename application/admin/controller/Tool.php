@@ -5,8 +5,11 @@ use think\Db;
 use think\Controller;
 use think\Request;
 use think\facade\App;
+use think\Container;
 
 class Tool extends Controller {
+    
+    protected $middleware = ['CheckAdmin', 'AdminAfter'];
     
     public function main() {
         $today = strtotime(date("Y-m-d"),time());
@@ -35,6 +38,28 @@ class Tool extends Controller {
             'info' => $info,
             'count' => $count
         ]);
+    }
+
+
+    // 清空过期缓存
+    public function empty_expired_cache() {
+        // 清空过期缓存
+        $path = Container::get('app')->getRuntimePath() . 'cache' . DIRECTORY_SEPARATOR;
+        $files = (array) glob($path . (config('cache.prefix') ? config('cache.prefix') . DIRECTORY_SEPARATOR : '') . '*');
+        foreach ($files as $path) {
+            if (is_dir($path)) {
+                $matches = glob($path . DIRECTORY_SEPARATOR . '*.php');
+                array_map('del_expired_file_cache', $matches);
+                // 文件夹为空则删除
+                if(empty(array_diff(scandir($path),array('..','.')))) {
+                    rmdir($path);
+                }
+            } else {
+                del_expired_file_cache($path);
+            }
+        }
+        $this->request->act_log = '清空过期缓存'; 
+        success('ok!');
     }
 
 }

@@ -37,6 +37,7 @@ class Base extends Controller {
 
     public function __construct() {
         parent::__construct();
+
         //验证方法是否存在
         $actionIsHave = method_exists($this, $this->request->action());
         if(empty($actionIsHave)) {
