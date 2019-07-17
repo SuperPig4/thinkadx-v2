@@ -7,12 +7,20 @@ use think\facade\Cache;
  */
 class ParamsChcke {
 
+    // 包头
     private static $header = [];
+    // 提交数据
     private static $post = [];
+    // 上传文件
     private static $files = [];
+    // url有效期
     private static $apiTimeOut = 30;
+    // 随机字符串 防止重放
     private static $nonce;
+    // 可有可无
     private static $appsecret = '';
+    // 缓存类型
+    private static $cacheType = 'default';
 
     public static function setAppSecret($appsecret) {
         self::$appsecret = $appsecret;
@@ -34,6 +42,10 @@ class ParamsChcke {
         if(is_array($data)) {
             self::$files = $data;    
         }
+    }
+
+    public static function setCacheType($name) {
+        self::$cacheType = $name;
     }
 
     /**
@@ -73,7 +85,7 @@ class ParamsChcke {
      * 使用重放字符串
      */
     private static function useNonce() {
-        Cache::set(self::$nonce, time(), self::$apiTimeOut);
+        Cache::store(self::$cacheType)->set(self::$nonce, 'nonce_'.time(), self::$apiTimeOut);
     }
 
 
@@ -139,7 +151,7 @@ class ParamsChcke {
             $salt .= $header['token'];
         }
         self::$nonce = MD5($header['nonce'].$salt);
-        if(Cache::get(self::$nonce)) {
+        if(Cache::store(self::$cacheType)->get(self::$nonce)) {
             return '链接已被使用';
         }
         return true;
