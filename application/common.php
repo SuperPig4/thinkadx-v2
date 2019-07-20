@@ -9,19 +9,7 @@
 // | Author: 流年 <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 
-/**
- * 删除过期的file缓存
- */
-function del_expired_file_cache($filename) {
-    $content      = file_get_contents($filename);
-    if (false !== $content) {
-        $expire = (int) substr($content, 8, 12);
-        if (0 != $expire && time() > filemtime($filename) + $expire) {
-            //缓存过期删除缓存文件
-            is_file($filename) && unlink($filename);
-        }
-    }
-}
+
 
 
 /**
@@ -68,7 +56,22 @@ function send_http($url, $sendType, $param = '') {
 
 
 /**
- * 验证文件URL是否为本站
+ * 删除过期的file缓存 - thinkadx依赖
+ */
+function del_expired_file_cache($filename) {
+    $content      = file_get_contents($filename);
+    if (false !== $content) {
+        $expire = (int) substr($content, 8, 12);
+        if (0 != $expire && time() > filemtime($filename) + $expire) {
+            //缓存过期删除缓存文件
+            is_file($filename) && unlink($filename);
+        }
+    }
+}
+
+
+/**
+ * 验证文件URL是否为本站 - thinkadx依赖
  */
 function validate_file_url($url) {
     $param = parse_url($url);
@@ -81,7 +84,7 @@ function validate_file_url($url) {
 
 
 /**
- * 本地路径转换成
+ * 本地路径转换成 - thinkadx依赖
  * @param string $path 
  * @param array $host 域名 默认自动获取
  * @return string
@@ -100,7 +103,7 @@ function local_path_turn_url($path, $host = '') {
 
 
 /**
- * 获得系统配置信息
+ * 获得系统配置信息 - thinkadx依赖
  * @param string $name 配置名 app:应用类型的配置信息 system:系统配置信息
  * @return string
  */
@@ -125,7 +128,7 @@ function system_config($name) {
 
 
 /**
- * 返回成功
+ * 返回成功 - thinkadx依赖
  * @param string $msg 返回提示
  * @param array $data 数据
  * @param array $code 状态码
@@ -141,7 +144,7 @@ function success($msg = '', $data = [], $code = 200, $header = []) {
 
 
 /**
- * 返回失败
+ * 返回失败 - thinkadx依赖
  * @param string $msg 返回提示
  * @param array $data 数据
  * @param array $code 状态码
