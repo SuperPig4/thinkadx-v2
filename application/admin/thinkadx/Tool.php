@@ -9,8 +9,6 @@ use think\Container;
 
 class Tool extends Controller {
     
-    protected $middleware = ['CheckAdmin', 'AdminAfter'];
-    
     public function main() {
         $today = strtotime(date("Y-m-d"),time());
         $count = [

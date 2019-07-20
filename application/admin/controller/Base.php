@@ -4,7 +4,6 @@ namespace app\admin\controller;
 use think\Controller;
 use think\Response;
 use think\facade\Cache;
-use think\facade\Env;
 use think\Db;
 
 class Base extends Controller {
@@ -37,10 +36,7 @@ class Base extends Controller {
     
     public function __construct() {
         parent::__construct();
-        var_dump(config('extra_file_list'));
-        testxx();
-        exit();
-        // echo Env::get('app_path');exit();
+
         //验证方法是否存在
         $actionIsHave = method_exists($this, $this->request->action());
         if(empty($actionIsHave)) {
