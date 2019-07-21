@@ -68,11 +68,14 @@ class Menu extends Base {
             foreach($list as $key=>&$val) {
                 if($val['father_id'] != 0) {
                     $check = $ruleAuth->check($val['module'], $val['controller'], $val['action']);
-                    if(!$check) unset($list[$key]);
+                    if(!$check) {
+                        unset($list[$key]);
+                        continue;
+                    }
                 }
                 $id = $val['id'];
                 $fatherId = $val['father_id'];
-                $mapping[$fatherId][] = &$val;
+                $mapping[$fatherId][] = $val;
                 $val['children'] = &$mapping[$id];
                 if($val['father_id'] != 0) {
                     unset($list[$key]);

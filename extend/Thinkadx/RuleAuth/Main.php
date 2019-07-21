@@ -3,7 +3,6 @@ namespace Thinkadx\RuleAuth;
 use think\Db;
 use think\facade\Cache;
 use think\facade\Request;
-use Thinkadx\RuleAuth\Rule\Standard;
 
 /**
  * 注意
@@ -50,13 +49,15 @@ class Main {
         }
 
         $module === true && $module = Request::module();
-        $controller === true && $controller = Request::controller(true);
+        $controller === true && $controller = lcfirst(Request::controller());
         $action === true && $action = Request::action();
 
-        // $reflection = new \ReflectionClass('\ThinkAdx\RuleAuth\Rule\Admin');
-        // var_dump($reflection->getDocComment());
+        // 控制器大驼峰转下划线命名
+        $controller = preg_replace_callback('/([A-Z]{1})/',function($matches){
+            return '_'.strtolower($matches[0]);
+        },$controller);
 
-        $className = "\ThinkAdx\RuleAuth\Rule\\{$this->ruleClassName}";
+        $className = "\Thinkadx\RuleAuth\Rule\\{$this->ruleClassName}";
         $model = new $className($this->userInfo, $this->groupInfo, $this->roleInfo);
         return $model->run($module, $controller, $action);
     }
@@ -68,7 +69,7 @@ class Main {
     private function getInfoInit() {
         if(!$this->isInit) {
             $this->isInit = true;
-            $key = $this->ruleTable.'_rule_'.$this->userId;
+            $key = 'rule_'.$this->ruleTable.'_'.$this->ruleClassName.'_'.$this->userId;
             $data = Cache::get($key);
             if(empty($data)) {
                 $data['userInfo'] = Db::name($this->userTable)->where('id', $this->userId)->findOrFail();
@@ -96,7 +97,7 @@ class Main {
                     $data['roleInfo'] = $newRoleInfo;
                 }
                 //设置缓存
-                Cache::tag($this->ruleClassName.'_rule_auth')->set($key, $data);
+                Cache::tag('rule_tag_'.$this->ruleTable)->set($key, $data);
             }
             $this->userInfo = $data['userInfo'];
             $this->groupInfo = $data['groupInfo'];

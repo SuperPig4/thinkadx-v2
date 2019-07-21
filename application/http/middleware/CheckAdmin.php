@@ -33,11 +33,15 @@ class CheckAdmin extends Controller {
             error($tokenCheckRes['msg'], $tokenCheckRes['data']);
         } else {
             if(array_key_exists('user_id', $tokenCheckRes['data'])) {
-                // $request->user_id = $tokenCheckRes['data']['user_id'];
                 define('USER_ID', $tokenCheckRes['data']['user_id']);
+                // 进行权限检测
+                $ruleAuth = new Main('admin_rule', 'admin_group', 'admin', USER_ID);
+                $check = $ruleAuth->check();
+                if(!$check) {
+                    error('暂无权限');
+                }
             }
         }
-        // $request->user_id = 1;
         return $next($request);
     }
 
