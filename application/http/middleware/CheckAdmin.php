@@ -3,6 +3,7 @@
 namespace app\http\middleware;
 use think\facade\Cache;
 use Thinkadx\ApiAuth\ParamsChcke;
+use Thinkadx\RuleAuth\Main;
 use think\Controller;
 
 class CheckAdmin extends Controller {
