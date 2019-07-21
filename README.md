@@ -31,7 +31,7 @@ V2版本比V1版本改进了不少,V1版本应该不会再去维护了
 ~~~
 1、git clone https://gitee.com/first_pig/thinkadx-v2.git
 拉取thinkphp核心框架,当然你也可以按照你或者tp文档的方式进行安装
-2、git clone --branch v5.1.37 https://gitee.com/liu21st/framework.git thinkphp
+2、git clone v5.1.37 https://gitee.com/liu21st/framework.git thinkphp
 ~~~
 
 初始化MySql
