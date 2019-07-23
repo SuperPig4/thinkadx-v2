@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : 我的腾讯云服务器
+ Source Server         : 127.0.0.1
  Source Server Type    : MySQL
- Source Server Version : 50562
- Source Host           : 118.24.221.147:3306
- Source Schema         : thinkadx-v
+ Source Server Version : 50553
+ Source Host           : localhost:3306
+ Source Schema         : thinkadx-v2
 
  Target Server Type    : MySQL
- Target Server Version : 50562
+ Target Server Version : 50553
  File Encoding         : 65001
 
- Date: 16/07/2019 16:33:26
+ Date: 24/07/2019 02:02:49
 */
 
 SET NAMES utf8mb4;
@@ -72,12 +72,7 @@ CREATE TABLE `tx_admin_log`  (
   `other_info` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '其他信息',
   `act_time` int(11) NOT NULL COMMENT '操作时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '管理员操作表' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of tx_admin_log
--- ----------------------------
-INSERT INTO `tx_admin_log` VALUES (1, 1, '登陆成功', '127.0.0.1', 'admin', 'adminuser', 'login', '', 1563265888);
+) ENGINE = MyISAM AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '管理员操作表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for tx_admin_menu
@@ -99,9 +94,9 @@ CREATE TABLE `tx_admin_menu`  (
 -- ----------------------------
 -- Records of tx_admin_menu
 -- ----------------------------
-INSERT INTO `tx_admin_menu` VALUES (1, '/uploads/menu_icon/5c/7710c57f905aff97c52ce5100a58e4.png', '系统设置', ' ', ' ', ' ', 1, 0, 1561317212);
+INSERT INTO `tx_admin_menu` VALUES (1, '/uploads/system_default_icon/system_setup.png', '系统设置', ' ', ' ', ' ', 1, 0, 1561317212);
 INSERT INTO `tx_admin_menu` VALUES (2, '', '菜单设置', 'admin', 'menu', 'index', 1, 1, 1561317862);
-INSERT INTO `tx_admin_menu` VALUES (3, '/uploads/menu_icon/65/b18ee16c1c4088faba0088753ec39b.png', '管理员管理', '', '', '', 1, 0, 1561356111);
+INSERT INTO `tx_admin_menu` VALUES (3, '/uploads/system_default_icon/admin_manage.png', '管理员管理', '', '', '', 1, 0, 1561356111);
 INSERT INTO `tx_admin_menu` VALUES (4, '', '管理员列表', 'admin', 'admin_user', 'index', 1, 3, 1561398603);
 INSERT INTO `tx_admin_menu` VALUES (5, '', '管理员分组', 'admin', 'admin_group', 'index', 1, 3, 1561776003);
 INSERT INTO `tx_admin_menu` VALUES (6, '', '分组规则', 'admin', 'admin_rule', 'index', 1, 3, 1561847710);
@@ -135,7 +130,7 @@ CREATE TABLE `tx_admin_oauth`  (
 -- ----------------------------
 -- Records of tx_admin_oauth
 -- ----------------------------
-INSERT INTO `tx_admin_oauth` VALUES (1, 1, '3b1f1f4eafccab421abac7b9bfe056b6', '738607423', 'pwd', 'api', '8ff9eee93f4d2154899215604d99b6b2', '8587c6b56657c720ada5073233519961', 'be55300e2c5c9f4a43765589d8f9ba46', 1563265887, 1563265888, 1562056804);
+INSERT INTO `tx_admin_oauth` VALUES (1, 1, '3b1f1f4eafccab421abac7b9bfe056b6', '738607423', 'pwd', 'api', '85019411ed8b0e553e583379a1dcd89c', '79ad3af1e563927eda56b64a25cf8a71', '8ff9eee93f4d2154899215604d99b6b2', 1563902453, 1563902454, 1562056804);
 
 -- ----------------------------
 -- Table structure for tx_admin_rule
