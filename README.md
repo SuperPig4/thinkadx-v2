@@ -38,12 +38,10 @@ V2版本比V1版本改进了不少,V1版本应该不会再去维护了
 [apache、nginx配置手册](https://www.kancloud.cn/manual/thinkphp5_1/353955)
 
 ~~~
-1、打开根目录的config->database.php配置自己的数据库,然后在根目录打开命令行(能运行到根目录的think就行)
+1、打开根目录的/config/database.php配置文件把自己的数据库(字符集utf8)信息填进去,然后在根目录打开命令行(能运行到根目录的think就行)
 
-
-这条命令意思是导入数据到数据库并创建资源文件(图片),返回 "init success!!!"表示数据导入完成
 2、php think thinkadx --init mysql
-
+这条命令意思是导入数据到数据库并创建资源文件(图片),返回 "init success!!!"表示数据导入完成
 
 3、到这里基本上已经搭建起来了,把apache或者nginx配置一下就行,默认是已经配置好apache的了,不会的话看官方文档
 ~~~
