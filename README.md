@@ -5,18 +5,20 @@ Thinkadx-v2
 
 V2版本比V1版本改进了不少,V1版本应该不会再去维护了
 
-> ThinkPHP5.1的运行环境要求PHP5.6以上。
+## 注意
 
-> MySql >= 5.5.0
+1. ThinkPHP5.1的运行环境要求PHP5.6以上。
 
-> 运行目录是public
+2. MySql >= 5.5.0
+
+3. 运行目录是public
 
 ## 技术栈(后端)
-> php5.6
+1. php5.6
 
-> mysql
+2. mysql
 
-> thinkphp5.1
+3. thinkphp5.1
 
 ## 技术栈(前端)
 
@@ -29,6 +31,7 @@ V2版本比V1版本改进了不少,V1版本应该不会再去维护了
 ~~~
 1、git clone https://gitee.com/first_pig/thinkadx-v2.git
 拉取thinkphp核心框架,当然你也可以按照你或者tp文档的方式进行安装
+
 2、git clone v5.1.37 https://gitee.com/liu21st/framework.git thinkphp
 ~~~
 
@@ -46,5 +49,8 @@ V2版本比V1版本改进了不少,V1版本应该不会再去维护了
 
 搭建模板(目前只有这一个模板,后期可能会增加更多样的模板)
 + [搭建模板教程](https://gitee.com/first_pig/thinkadx-template)
+
+## 社交
+- 企鹅群 801456419
 
 
