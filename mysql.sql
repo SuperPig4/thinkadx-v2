@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : 我的腾讯云服务器
+ Source Server         : 127.0.0.1
  Source Server Type    : MySQL
- Source Server Version : 50562
- Source Host           : 118.24.221.147:3306
- Source Schema         : thinkadx-v
+ Source Server Version : 50553
+ Source Host           : localhost:3306
+ Source Schema         : thinkadx-v2
 
  Target Server Type    : MySQL
- Target Server Version : 50562
+ Target Server Version : 50553
  File Encoding         : 65001
 
- Date: 16/07/2019 16:33:26
+ Date: 29/07/2019 22:51:19
 */
 
 SET NAMES utf8mb4;
@@ -72,12 +72,25 @@ CREATE TABLE `tx_admin_log`  (
   `other_info` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '其他信息',
   `act_time` int(11) NOT NULL COMMENT '操作时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '管理员操作表' ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 15 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '管理员操作表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tx_admin_log
 -- ----------------------------
 INSERT INTO `tx_admin_log` VALUES (1, 1, '登陆成功', '127.0.0.1', 'admin', 'adminuser', 'login', '', 1563265888);
+INSERT INTO `tx_admin_log` VALUES (2, 1, '登陆成功', '127.0.0.1', 'admin', 'adminuser', 'login', '', 1563294540);
+INSERT INTO `tx_admin_log` VALUES (3, 1, '清空过期缓存', '127.0.0.1', 'admin', 'tool', 'empty_expired_cache', '', 1563294617);
+INSERT INTO `tx_admin_log` VALUES (4, 1, '登陆成功', '127.0.0.1', 'admin', 'adminuser', 'login', '', 1563294774);
+INSERT INTO `tx_admin_log` VALUES (5, 1, '清空过期缓存', '127.0.0.1', 'admin', 'tool', 'empty_expired_cache', '', 1563295644);
+INSERT INTO `tx_admin_log` VALUES (6, 1, '登陆成功', '127.0.0.1', 'admin', 'adminuser', 'login', '', 1563307659);
+INSERT INTO `tx_admin_log` VALUES (7, 1, '登陆成功', '127.0.0.1', 'admin', 'adminuser', 'login', '', 1563605405);
+INSERT INTO `tx_admin_log` VALUES (8, 1, '登陆成功', '127.0.0.1', 'admin', 'adminuser', 'login', '', 1563685783);
+INSERT INTO `tx_admin_log` VALUES (9, 1, '登陆成功', '127.0.0.1', 'admin', 'adminuser', 'login', '', 1564410711);
+INSERT INTO `tx_admin_log` VALUES (10, 1, '编辑了栏目', '127.0.0.1', 'admin', 'menu', 'add_edit', '', 1564410885);
+INSERT INTO `tx_admin_log` VALUES (11, 1, '编辑了栏目', '127.0.0.1', 'admin', 'menu', 'add_edit', '', 1564411160);
+INSERT INTO `tx_admin_log` VALUES (12, 1, '登陆成功', '127.0.0.1', 'admin', 'adminuser', 'login', '', 1564411181);
+INSERT INTO `tx_admin_log` VALUES (13, 1, '登陆成功', '127.0.0.1', 'admin', 'adminuser', 'login', '', 1564411267);
+INSERT INTO `tx_admin_log` VALUES (14, 1, '登陆成功', '127.0.0.1', 'admin', 'adminuser', 'login', '', 1564411538);
 
 -- ----------------------------
 -- Table structure for tx_admin_menu
@@ -93,21 +106,22 @@ CREATE TABLE `tx_admin_menu`  (
   `status` tinyint(1) NOT NULL COMMENT '是否显示 0:不显示 1:显示',
   `father_id` int(11) NOT NULL DEFAULT 0 COMMENT '上级id',
   `create_time` int(11) NOT NULL COMMENT '操作时间',
+  `sort` int(11) NOT NULL COMMENT '排序 越大越前',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = MyISAM AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '管理员菜单表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tx_admin_menu
 -- ----------------------------
-INSERT INTO `tx_admin_menu` VALUES (1, '/uploads/menu_icon/5c/7710c57f905aff97c52ce5100a58e4.png', '系统设置', ' ', ' ', ' ', 1, 0, 1561317212);
-INSERT INTO `tx_admin_menu` VALUES (2, '', '菜单设置', 'admin', 'menu', 'index', 1, 1, 1561317862);
-INSERT INTO `tx_admin_menu` VALUES (3, '/uploads/menu_icon/65/b18ee16c1c4088faba0088753ec39b.png', '管理员管理', '', '', '', 1, 0, 1561356111);
-INSERT INTO `tx_admin_menu` VALUES (4, '', '管理员列表', 'admin', 'admin_user', 'index', 1, 3, 1561398603);
-INSERT INTO `tx_admin_menu` VALUES (5, '', '管理员分组', 'admin', 'admin_group', 'index', 1, 3, 1561776003);
-INSERT INTO `tx_admin_menu` VALUES (6, '', '分组规则', 'admin', 'admin_rule', 'index', 1, 3, 1561847710);
-INSERT INTO `tx_admin_menu` VALUES (7, '', '系统配置', 'admin', 'config', 'index', 1, 1, 1562012009);
-INSERT INTO `tx_admin_menu` VALUES (8, '', '管理员操作日志', 'admin', 'admin_log', 'index', 1, 1, 1562025198);
-INSERT INTO `tx_admin_menu` VALUES (9, '', '过期缓存清除', 'admin', 'tool', 'empty_expired_cache', 1, 1, 1562025198);
+INSERT INTO `tx_admin_menu` VALUES (1, '/uploads/system_default_icon/system_setup.png', '系统设置', ' ', ' ', ' ', 1, 0, 1561317212, 0);
+INSERT INTO `tx_admin_menu` VALUES (2, '', '菜单设置', 'admin', 'menu', 'index', 1, 1, 1561317862, 0);
+INSERT INTO `tx_admin_menu` VALUES (3, '/uploads/system_default_icon/admin_manage.png', '管理员管理', '', '', '', 1, 0, 1561356111, 0);
+INSERT INTO `tx_admin_menu` VALUES (4, '', '管理员列表', 'admin', 'admin_user', 'index', 1, 3, 1561398603, 0);
+INSERT INTO `tx_admin_menu` VALUES (5, '', '管理员分组', 'admin', 'admin_group', 'index', 1, 3, 1561776003, 0);
+INSERT INTO `tx_admin_menu` VALUES (6, '', '分组规则', 'admin', 'admin_rule', 'index', 1, 3, 1561847710, 0);
+INSERT INTO `tx_admin_menu` VALUES (7, '', '系统配置', 'admin', 'config', 'index', 1, 1, 1562012009, 0);
+INSERT INTO `tx_admin_menu` VALUES (8, '', '管理员操作日志', 'admin', 'admin_log', 'index', 1, 1, 1562025198, 0);
+INSERT INTO `tx_admin_menu` VALUES (9, '', '清除过期缓存', 'admin', 'tool', 'empty_expired_cache', 1, 1, 1562025198, 0);
 
 -- ----------------------------
 -- Table structure for tx_admin_oauth
@@ -135,7 +149,7 @@ CREATE TABLE `tx_admin_oauth`  (
 -- ----------------------------
 -- Records of tx_admin_oauth
 -- ----------------------------
-INSERT INTO `tx_admin_oauth` VALUES (1, 1, '3b1f1f4eafccab421abac7b9bfe056b6', '738607423', 'pwd', 'api', '8ff9eee93f4d2154899215604d99b6b2', '8587c6b56657c720ada5073233519961', 'be55300e2c5c9f4a43765589d8f9ba46', 1563265887, 1563265888, 1562056804);
+INSERT INTO `tx_admin_oauth` VALUES (1, 1, '3b1f1f4eafccab421abac7b9bfe056b6', '738607423', 'pwd', 'api', '794f7603e127e519538f5bb2c962d97d', '4041b2368aa56e2311319d953c276c90', '0eb78f050b5ab1e708ab23a923e12011', 1564411538, 1564411538, 1562056804);
 
 -- ----------------------------
 -- Table structure for tx_admin_rule

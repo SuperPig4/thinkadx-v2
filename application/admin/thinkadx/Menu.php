@@ -58,7 +58,7 @@ class Menu extends Base {
 
     // 获得列表
     public function get_list() {
-        $list = AdminMenu::where('status', 1)->select();
+        $list = AdminMenu::where('status', 1)->order('sort DESC')->select();
         if(empty($list)) {
             success('ok!',[]);
         } else {

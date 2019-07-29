@@ -19,7 +19,9 @@ class Menu extends Validate {
         // 上级ID
         'father_id' => 'require|number|check_father_id',
         // ID
-        'id' => 'require|number'
+        'id' => 'require|number',
+        // 排序值
+        'sort' => 'number',
     ];
     
     protected $message = [
@@ -33,7 +35,8 @@ class Menu extends Validate {
         'controller.max' => '控制器最长30个字符串',
         'action' => '请输入方法',
         'action.max' => '方法最长30个字符串',
-        'father_id' => 'father_id 字段必须存在'
+        'father_id' => 'father_id 字段必须存在',
+        'sort' => '排序值只能是数字',
     ];
 
     protected $scene = [
@@ -41,7 +44,7 @@ class Menu extends Validate {
         'delete' => ['id'],
         'index' => [''],
         'detail' => ['id'],
-        'add_edit' => ['icon', 'title', 'module', 'controller', 'action', 'father_id']
+        'add_edit' => ['icon', 'title', 'module', 'controller', 'action', 'father_id', 'sort']
     ];
 
 

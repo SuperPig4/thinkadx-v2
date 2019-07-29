@@ -84,7 +84,6 @@ class Thinkadx extends Command
             }
         }
 
-    	// 指令输出
     }
 
     protected function createDefaultIcon($output) {
