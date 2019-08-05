@@ -4,12 +4,15 @@ namespace app\http\middleware;
 use think\facade\Cache;
 use Thinkadx\ApiAuth\ParamsChcke;
 use Thinkadx\RuleAuth\Main;
+use Thinkadx\Captcha\Main as CaptchaMain;
+use Thinkadx\Captcha\Create as CaptchaCreate;
+use Thinkadx\Captcha\Check as CaptchaCheck;
 use think\Controller;
 
 class CheckAdmin extends Controller {
 
     public function handle($request, \Closure $next) {
-        
+
         ParamsChcke::setHeader($request->header());
         ParamsChcke::setPost($request->post(false));
         ParamsChcke::setFiles($request->file());
@@ -54,7 +57,8 @@ class CheckAdmin extends Controller {
             'Index' => ['index'],
             'AdminUser' => ['login', 'rese_token'],
             'Upload' => ['index'],
-            'Config' => ['get_system_config']
+            'Config' => ['get_system_config'],
+            'Tool' => ['get_verify'],
         ];
         $result = ['code'=>0, 'msg'=>'未知错误', 'data'=>['errorCode'=>0]];
         $ignoreAr = [];

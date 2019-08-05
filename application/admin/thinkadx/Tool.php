@@ -6,9 +6,10 @@ use think\Controller;
 use think\Request;
 use think\facade\App;
 use think\Container;
+use Thinkadx\Captcha\Main as CaptchaMain;
 
 class Tool extends Controller {
-    
+
     public function main() {
         $today = strtotime(date("Y-m-d"),time());
         $count = [
@@ -58,5 +59,16 @@ class Tool extends Controller {
         $this->request->act_log = '清空过期缓存'; 
         success('ok!');
     }
+
+
+    // 验证码
+    public function get_verify() {
+        $key = $this->request->param('key/s');
+        if(empty($key)) {
+            error('参数错误');
+        }
+        CaptchaMain::show($key);
+    }
+
 
 }
