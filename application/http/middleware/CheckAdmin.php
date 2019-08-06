@@ -4,15 +4,11 @@ namespace app\http\middleware;
 use think\facade\Cache;
 use Thinkadx\ApiAuth\ParamsChcke;
 use Thinkadx\RuleAuth\Main;
-use Thinkadx\Captcha\Main as CaptchaMain;
-use Thinkadx\Captcha\Create as CaptchaCreate;
-use Thinkadx\Captcha\Check as CaptchaCheck;
 use think\Controller;
 
 class CheckAdmin extends Controller {
 
     public function handle($request, \Closure $next) {
-
         ParamsChcke::setHeader($request->header());
         ParamsChcke::setPost($request->post(false));
         ParamsChcke::setFiles($request->file());
@@ -20,7 +16,7 @@ class CheckAdmin extends Controller {
         if(is_string($apiHeadrCheckRes)) {
             error($apiHeadrCheckRes);
         }
-        
+
         if(defined("Validate_Name")) {
             try {
                 $validateInstance = validate("\\app\\admin\\validate\\".Validate_Name);

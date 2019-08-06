@@ -151,6 +151,7 @@ class ParamsChcke {
             $salt .= $header['token'];
         }
         self::$nonce = MD5($header['nonce'].$salt);
+      
         if(Cache::store(self::$cacheType)->get(self::$nonce)) {
             return '链接已被使用';
         }

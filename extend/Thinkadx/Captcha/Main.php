@@ -1,7 +1,7 @@
 <?php
 namespace Thinkadx\Captcha;
 
-use think\Cache;
+use think\facade\Cache;
 
 class Main {
     
