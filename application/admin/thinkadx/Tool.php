@@ -8,7 +8,7 @@ use think\facade\App;
 use think\Container;
 use Thinkadx\Captcha\Main as CaptchaMain;
 
-class Tool extends Controller {
+class Tool extends Base {
 
     public function main() {
         $today = strtotime(date("Y-m-d"),time());
@@ -61,13 +61,26 @@ class Tool extends Controller {
     }
 
 
+    // 验证码 - 获得key
+    public function get_verify_key() {
+        $key = md5($this->request->ip().time().mt_rand(11111, 99999));
+        cache($key, '1', 3600);
+        success('ok!', $key);
+    }
+
+
     // 验证码
-    public function get_verify() {
+    public function get_verify_img() {
         $key = $this->request->param('key/s');
         if(empty($key)) {
             error('参数错误');
+        } else {
+            $keyContent = cache($key);
+            if($keyContent === '1') {
+                CaptchaMain::show($key);
+            }
         }
-        CaptchaMain::show($key);
+        error('请重新刷新验证码');
     }
 
 

@@ -16,7 +16,7 @@ class Main {
         $img = new Create();
         $img->create($code);
         // 缓存验证码
-        Cache::set($key, $img->get_code(), $expire);
+        Cache::set('captcha_'.$key, $img->get_code(), $expire);
         $img->show();
     }
 
@@ -28,10 +28,11 @@ class Main {
      * @return string/bool
      */
     public static function check($key, $val) {
+        $key = 'captcha_'.$key;
         $code = Cache::get($key);
         if(empty($code)) {
             return '验证码过期或不存在,请刷新验证码';
-        } else if($val != $code) {
+        } else if(strtolower($val) != strtolower($code)) {
             return '验证码错误';
         }
         Cache::rm($key);
