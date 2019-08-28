@@ -12,7 +12,7 @@ class Upload extends Base {
         $info = $file->rule('md5')->validate(['size'=>1048576,'ext'=>'jpg,png'])->move('./uploads/'.$saveFileName);
         if($info){
             $locaPath = str_replace("\\","/",'uploads/'.$saveFileName.'/'.$info->getSaveName());
-            chmode($locaPath, 0644);
+            chmod($locaPath, 0644);
             $url = $this->request->scheme().'://'.$this->request->host().'/'.$locaPath;
             success('ok!',[
                 'locaPath' => $locaPath,
