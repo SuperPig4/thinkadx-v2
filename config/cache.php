@@ -15,22 +15,22 @@
 
 return [
     // 缓存配置为复合类型
-    'type'  =>  'complex', 
-    'default'	=>	[
-      'type'	=>	'file',
-      // 全局缓存有效期（0为永久有效）
-      'expire'=>  0, 
-      // 缓存前缀
-      'prefix'=>  'default',
-       // 缓存目录
-      'path'  =>  '../runtime/cache/',
+    'type'  =>  'complex',
+    'default'    =>    [
+        'type'    =>    'file',
+        // 全局缓存有效期（0为永久有效）
+        'expire' =>  0,
+        // 缓存前缀
+        'prefix' =>  'default',
+        // 缓存目录
+        'path'  =>  '../runtime/cache/',
     ],
-    'redis'	=>	[
-      'type'	=>	'redis',
-      'host'	=>	'127.0.0.1',
-      // 全局缓存有效期（0为永久有效）
-      'expire'=>  0, 
-      // 缓存前缀
-      'prefix'=>  'thinkadx_',
-    ],    
+    'redis'    =>    [
+        'type'    =>    'redis',
+        'host'    =>    '127.0.0.1',
+        // 全局缓存有效期（0为永久有效）
+        'expire' =>  0,
+        // 缓存前缀
+        'prefix' =>  'thinkadx_',
+    ],
 ];

@@ -14,7 +14,7 @@ class CheckAdmin extends Controller {
         $ignoreList = [
             'Tool' => ['get_verify_img'],
         ];
-
+        
         $isIgnore = $this->ignore_check($ignoreList, $request->controller(), $request->action(true));
         if(!$isIgnore) {
             ParamsChcke::setHeader($request->header());

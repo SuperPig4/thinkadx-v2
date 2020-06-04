@@ -31,31 +31,23 @@ class Thinkadx extends Command
         if($input->hasOption('init')) {
             $initType = $input->getOption('init');
             switch($initType) {
-                case 'mysql' : 
+                case 'mysql-data' :
                         // 检测是否可以导入
                         try {
                             if(Admin::count() > 0) {
-                                throw new \think\Exception('admin init fail', 10006);
+                                throw new \think\Exception('init fail, data exists', 10006);
                             }
                         } catch(\think\exception\PDOException $e) {
-                            // echo 'ok';
+                            throw new \think\Exception('init fail, not table exists', 10006);
                         }   
-                        
-                        // 导入mysql
-                        $myfile = fopen('mysql.sql', 'r');
-                        $sqlString = fread($myfile,filesize("mysql.sql"));
-                        fclose($myfile);
-                        $sqlArr = explode(';', $sqlString);
-                        //执行sql语句
-                        array_pop($sqlArr);
-                        foreach ($sqlArr as $_value) {
-                            Db::execute($_value.';');
-                        }
-                        $output->writeln('data write success...');
 
+                        // 创建数据
+                        $this->writeDatebaseData();
+                        $output->writeln('data write success...');
                         // 创建系统资源
                         $output->writeln('create resources ...');
                         $this->createDefaultIcon($output);
+
                         $output->writeln('init success!!!');
                     break;
             }
@@ -122,6 +114,170 @@ class Thinkadx extends Command
             $new_file = $path . $name . ".{$type}";
             file_put_contents($new_file, base64_decode(str_replace($result[1], '', $content)));
         }
+    }
+
+
+    // 往数据库写数据
+    protected function writeDatebaseData() {
+        $timeStr = time();
+
+        // admin
+        Db::name('admin')->insert([
+            'avatar'        => '',
+            'group_id'      => 1,
+            'nickname'      => '超级管理员',
+            'access'        => 'admin',
+            'create_time'   => $timeStr,
+        ]);
+
+        // admin_group
+        Db::name('admin_group')->insert([
+            'name'          => '所有权限',
+            'status'        => '1',
+            'rules'         => '1',
+            'create_time'   => $timeStr,
+        ]);
+
+        // admin_menu
+        Db::name('admin_menu')->insertAll([
+            [
+                'icon'        => '/uploads/system_default_icon/system_setup.png',
+                'title'       => '系统设置',
+                'module'      => '',
+                'controller'  => '',
+                'action'      => '',
+                'status'      => 1,
+                'father_id'   => 0,
+                'create_time' => $timeStr,
+            ],
+            [
+                'icon'        => '',
+                'title'       => '菜单设置',
+                'module'      => 'admin',
+                'controller'  => 'menu',
+                'action'      => 'index',
+                'status'      => 1,
+                'father_id'   => 1,
+                'create_time' => $timeStr,
+            ],
+            [
+                'icon'        => '/uploads/system_default_icon/admin_manage.png',
+                'title'       => '管理员管理',
+                'module'      => '',
+                'controller'  => '',
+                'action'      => '',
+                'status'      => 1,
+                'father_id'   => 0,
+                'create_time' => $timeStr,
+            ],
+            [
+                'icon'        => '',
+                'title'       => '管理员列表',
+                'module'      => 'admin',
+                'controller'  => 'admin_user',
+                'action'      => 'index',
+                'status'      => 1,
+                'father_id'   => 3,
+                'create_time' => $timeStr,
+            ],
+            [
+                'icon'        => '',
+                'title'       => '管理员分组',
+                'module'      => 'admin',
+                'controller'  => 'admin_group',
+                'action'      => 'index',
+                'status'      => 1,
+                'father_id'   => 3,
+                'create_time' => $timeStr,
+            ],
+            [
+                'icon'        => '',
+                'title'       => '分组规则',
+                'module'      => 'admin',
+                'controller'  => 'admin_rule',
+                'action'      => 'index',
+                'status'      => 1,
+                'father_id'   => 3,
+                'create_time' => $timeStr,
+            ],
+            [
+                'icon'        => '',
+                'title'       => '系统配置',
+                'module'      => 'admin',
+                'controller'  => 'config',
+                'action'      => 'index',
+                'status'      => 1,
+                'father_id'   => 1,
+                'create_time' => $timeStr,
+            ],
+            [
+                'icon'        => '',
+                'title'       => '管理员操作日志',
+                'module'      => 'admin',
+                'controller'  => 'admin_log',
+                'action'      => 'index',
+                'status'      => 1,
+                'father_id'   => 1,
+                'create_time' => $timeStr,
+            ],
+            [
+                'icon'        => '',
+                'title'       => '清除过期缓存',
+                'module'      => 'admin',
+                'controller'  => 'tool',
+                'action'      => 'empty_expired_cache',
+                'status'      => 1,
+                'father_id'   => 1,
+                'create_time' => $timeStr,
+            ],
+        ]);
+
+        // admin_oauth
+        Db::name('admin_oauth')->insert([
+            'admin_id'          =>  1,
+            'identifier'        => '3b1f1f4eafccab421abac7b9bfe056b6',
+            'unique_identifier' => '738607423',
+            'oauth_type'        => 'pwd',
+            'port_type'         => 'api',
+            'access_token'      => '',
+            'refresh_token'              => '',
+            'last_use_access_token'      => '',
+            'refresh_token_create_time'  => '',
+            'access_token_create_time'   => '',
+            'create_time'                => $timeStr,
+        ]);
+
+        // admin_rule
+        Db::name('admin_rule')->insert([
+            'rule'          =>  '*/*:*',
+            'des'           => '所有权限',
+            'create_time'   => $timeStr,
+        ]);
+
+        // admin_rule
+        Db::name('config')->insertAll([
+            [
+                'name'            =>  '管理员访问令牌周期',
+                'alias'           => 'admin_access_token_time_out',
+                'type'            => 'system',
+                'value'           => '7200',
+                'description'     => '秒位单位',
+            ],
+            [
+                'name'            =>  '管理员刷新令牌周期',
+                'alias'           => 'admin_refresh_token_time_out',
+                'type'            => 'system',
+                'value'           => '604800',
+                'description'     => '秒位单位',
+            ],
+            [
+                'name'            =>  '后台系统名称',
+                'alias'           => 'admin_system_name',
+                'type'            => 'system',
+                'value'           => '某某管理系统',
+                'description'     => '后台系统名称',
+            ],
+        ]);
     }
 
 }
