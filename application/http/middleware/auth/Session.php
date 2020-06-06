@@ -29,7 +29,7 @@ class Session extends Constraint {
             ThinkSession::init();
             
             $this->logic = '\\'.$params[0];
-            if(!ThinkSession::has($logic::getAuthDataName())) {
+            if(!ThinkSession::has($this->logic::getAuthDataName())) {
                 return $this->logic::fail();
             }
 
