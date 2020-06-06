@@ -1,13 +1,16 @@
 <?php
+/**
+ * 操作日记
+ */
 namespace app\http\middleware;
-use app\admin\model\AdminLog;
 
-class AdminAfter
+class ActionLog
 {
-    public function handle($request, \Closure $next) {
+    public function handle($request, \Closure $next, $model)
+    {
         $response = $next($request);
         //判断是否需要写入操作日志
-        if(!empty($request->act_log)) {
+        if(empty($request->act_log) === false && $model) {
             $logList = [];
             if(is_array($request->act_log)) {
                 foreach($request->act_log as $value) {
@@ -21,7 +24,8 @@ class AdminAfter
                 ];
             }
 
-            $adminLog = new AdminLog();
+            $model = '\\'.$model;
+            $adminLog = new $model();
             $adminLog->saveAll($logList);
         }
         return $response;

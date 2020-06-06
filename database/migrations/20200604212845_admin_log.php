@@ -46,7 +46,7 @@ class AdminLog extends Migrator
         ->addColumn('action', 'string', [
             'limit'   => 34
         ])
-        ->addColumn('other_info', 'text', [
+        ->addColumn('other_info', 'string', [
             'comment' => '其他信息'
         ])
         ->addColumn('act_time', 'integer', [

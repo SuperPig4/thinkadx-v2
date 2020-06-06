@@ -8,7 +8,35 @@ use think\Db;
 
 class Base extends Controller {
     
-    protected $middleware = ['CheckAdmin', 'AdminAfter'];
+    protected $middleware = [
+        [
+            \app\http\middleware\ApiAuth::class, 
+            [
+                'Tool' => ['get_verify_img']
+            ]
+        ], 
+        [
+            \app\http\middleware\AutoValidate::class,
+            []
+        ],
+        [
+            \app\http\middleware\auth\AdxToken::class, 
+            [
+                \app\admin\logic\middleware\auth\AdxToken::class,
+                [
+                    'Tool' => ['get_verify_img','get_verify_key'],
+                    'Index' => ['index'],
+                    'AdminUser' => ['login', 'rese_token'],
+                    'Upload' => ['index'],
+                    'Config' => ['get_system_config'],
+                ]
+            ]
+        ], 
+        [
+            \app\http\middleware\ActionLog::class,
+            \app\admin\model\AdminLog::class
+        ]
+    ];
    
     // 可通过子类定义的属性
     
@@ -36,7 +64,7 @@ class Base extends Controller {
     
     public function __construct() {
         parent::__construct();
-   
+
         //验证方法是否存在
         $actionIsHave = method_exists($this, $this->request->action());
         if(empty($actionIsHave)) {
@@ -50,10 +78,20 @@ class Base extends Controller {
     }
 
 
+    public function admin() {
+        if(defined('loadDataSerialize')) {
+            if(empty($this->admin)) {
+                $this->adminLoadData = unserialize(loadDataSerialize);
+            }
+            return $this->adminLoadData;
+        }
+    }
+
+
     //公共列表
     public function index() {
         $params = $this->get_params();
-
+        
         if(empty($this->table)) {
             $db = $this->get_model();
         }
