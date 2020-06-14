@@ -41,4 +41,8 @@ class AdxToken extends LogicConstraint{
         return error($data);
     } 
 
+    static public function containerName() {
+        return 'adminData';
+    }
+
 }

@@ -20,8 +20,12 @@ abstract class Constraint {
             $logic::getPk()
         );
 
+        // 兼容之前的
         define('USER_ID', $data['id']);
-        define('loadDataSerialize', serialize($obj));
+        
+        // 绑定容器
+        $name = method_exists($logic, 'containerName') ?  $logic::containerName() : 'loadData' ;
+        bind($name, $obj);
     }
 
 

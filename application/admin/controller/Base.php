@@ -41,10 +41,20 @@ class Base extends Controller {
         if(empty($actionIsHave)) {
             error('illegal action');
         }
-        
+    }
+
+
+    public function initialize() {
         if(!empty($this->validateName)) {
-            $name = $this->validateName === true ? $this->request->controller() : $this->validateName;
-            define('Validate_Name', $name);
+            $this->middleware = [
+                [
+                    \app\http\middleware\AutoValidate::class,
+                    [
+                        \app\admin\logic\middleware\AutoValidate::class,
+                        $this->validateName === true ? $this->request->controller() : $this->validateName
+                    ]
+                ]
+            ];
         }
     }
 

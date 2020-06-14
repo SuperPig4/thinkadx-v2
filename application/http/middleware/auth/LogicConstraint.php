@@ -35,5 +35,9 @@ abstract class LogicConstraint {
      * 验证不通过回调
      */
     abstract static public function fail($data = '');
+
+    // 绑定到容器的名字 - 空则为loadData
+    // abstract static public function containerName();
     
+
 }

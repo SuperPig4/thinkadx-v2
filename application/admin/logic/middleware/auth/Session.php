@@ -38,7 +38,16 @@ class Session extends LogicConstraint{
      * 验证不通过回调
      */
     static public function fail($data = '') {
-        return redirect('http://www.thinkphp.cn');
+        echo url('admin/adminUser/login');exit;
+        // return redirect('http://www.thinkphp.cn');
     } 
+
+
+    /**
+     * 容器名
+     */
+    static public function containerName() {
+        return 'adminData';
+    }
 
 }
