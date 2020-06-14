@@ -32,7 +32,8 @@ class Admin extends Migrator {
         $table->addColumn('group_id', 'integer', [
             'default' => '0'
         ])
-        ->addColumn('avatar', 'text', [
+        ->addColumn('avatar', 'string', [
+            'default' => '',
             'comment' => '用户头像 相对路径'
         ])
         ->addColumn('nickname', 'string', [

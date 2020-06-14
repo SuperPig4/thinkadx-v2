@@ -31,22 +31,28 @@ class AdminLog extends Migrator
         $table = $this->table('admin_log', ['engine' => 'MyISAM', 'comment' => '管理员操作表']);
         $table->addColumn('admin_id', 'integer')
         ->addColumn('des', 'string', [
+            'default' => '',
             'comment' => '描述'
         ])
         ->addColumn('ip', 'string', [
+            'default' => '',
             'limit'   => 24,
             'comment' => '描述'
         ])
         ->addColumn('module', 'string', [
+            'default' => '',
             'limit'   => 34
         ])
         ->addColumn('controller', 'string', [
+            'default' => '',
             'limit'   => 34
         ])
         ->addColumn('action', 'string', [
+            'default' => '',
             'limit'   => 34
         ])
         ->addColumn('other_info', 'string', [
+            'default' => '',
             'comment' => '其他信息'
         ])
         ->addColumn('act_time', 'integer', [

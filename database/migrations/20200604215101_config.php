@@ -45,6 +45,7 @@ class Config extends Migrator
             'comment' => '内容'
         ])
         ->addColumn('description', 'string', [
+            'default' => '',
             'comment' => '描述'
         ])
         ->create();

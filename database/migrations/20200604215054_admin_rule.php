@@ -33,6 +33,7 @@ class AdminRule extends Migrator
             'comment' => '匹配规则'
         ])
         ->addColumn('des', 'string', [
+            'default' => '',
             'comment' => '规则描述'
         ])
         ->addColumn('create_time', 'integer')

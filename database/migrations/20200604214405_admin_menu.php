@@ -32,15 +32,19 @@ class AdminMenu extends Migrator
         $table = $this->table('admin_menu', ['comment' => '管理员菜单表']);
         $table->addColumn('icon', 'string')
         ->addColumn('title', 'string', [
+            'default' => '',
             'limit'   => 34
         ])
         ->addColumn('module', 'string', [
+            'default' => '',
             'limit'   => 34
         ])
         ->addColumn('controller', 'string', [
+            'default' => '',
             'limit'   => 34
         ])
         ->addColumn('action', 'string', [
+            'default' => '',
             'limit'   => 34
         ])
         ->addColumn('status', 'integer', [

@@ -31,6 +31,7 @@ class AdminGroup extends Migrator
     {
         $table = $this->table('admin_group', ['comment' => '管理员权限分组表']);
         $table->addColumn('name', 'string', [
+            'default' => '',
             'limit'   => 24,
             'comment' => '姓名'
         ])
