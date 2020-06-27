@@ -28,41 +28,47 @@ class AdminOauth extends Migrator
      */
     public function change()
     {
-        $table = $this->table('admin_oauth', ['comment' => '第三方授权表 - 每条数据都有自己的 access_token和refresh_token 都是相对的']);
+        $table = $this->table('admin_oauth', ['comment' => '第三方授权表']);
         $table->addColumn('admin_id', 'integer')
         ->addColumn('identifier', 'string', [
             'default' => '',
-            'comment' => '第三方标识符 如:微信公众号授权登陆 则保存它的openid，unionid则保存到unique_identifier字段'
+            'comment' => '局部唯一标识符'
         ])
         ->addColumn('unique_identifier', 'string', [
             'default' => '',
-            'comment' => '唯一标识符 主要是用来存储相对于用户全局唯一的标识符'
+            'comment' => '全局唯一标识符'
         ])
         ->addColumn('oauth_type', 'string', [
             'limit'   => 12,
-            'comment' => '类型 auth:授权'
+            'comment' => '类型授权'
         ])
         ->addColumn('port_type', 'string', [
             'limit'   => 12,
-            'comment' => '终端类型 wxxcx:微信小程序'
+            'comment' => '终端类型'
         ])
         ->addColumn('access_token', 'string', [
             'default' => '',
+            'comment' => '访问令牌'
         ])
         ->addColumn('refresh_token', 'string', [
             'default' => '',
+            'comment' => '刷新令牌'
         ])
         ->addColumn('last_use_access_token', 'string', [
             'default' => '',
-            'comment' => '最后一次使用的access_token'
+            'comment' => '最后一次使用的访问令牌'
+        ])
+        ->addColumn('last_use_refresh_token', 'string', [
+            'default' => '',
+            'comment' => '最后一次使用的刷新令牌'
         ])
         ->addColumn('access_token_create_time', 'integer', [
             'default' => 0,
-            'comment' => '访问令牌最后一次刷新时间'
+            'comment' => '访问令牌创建时间'
         ])
         ->addColumn('refresh_token_create_time', 'integer', [
             'default' => 0,
-            'comment' => '刷新令牌最后一次刷新时间'
+            'comment' => '刷新令牌创建时间'
         ])
         ->addColumn('create_time', 'integer')
         ->addIndex(['admin_id'])
