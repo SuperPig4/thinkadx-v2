@@ -6,7 +6,7 @@ use think\facade\Cache;
 use think\Db;
 use app\admin\model\Admin;
 use app\admin\model\AdminOauth;
-
+use Thinkadx\Oauth2\Main;
 
 class AdminUser extends Base {
     
@@ -251,16 +251,24 @@ class AdminUser extends Base {
                 'oauth_type' => $data['oauth_type']
             ])->find();
             if(is_null($oauth)) {
-                error('登陆失败');
+                error('未找到该登录方式');
             } else {
-                $loginResult = $oauth->login();
+                $loginResult = Main::init(AdminOauth::class, Main::ModeList['PASSWORD'])
+                ->setPortType('api')
+                ->setId($data['password'])
+                ->setUniqueId($oauth->unique_identifier)
+                ->setCacheData($user->toArray())
+                ->setOauthModel($oauth)
+                ->logout()
+                ->login();
             }
+
             if(is_array($loginResult)) {
                 define('USER_ID', $oauth->admin_id);
                 $this->request->act_log = '登陆成功';
                 success('ok!', $loginResult);
             } else {
-                error($loginResult);
+                error('登录异常');
             }
         }
     }

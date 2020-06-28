@@ -27,14 +27,17 @@ class Password extends Base{
      */
     public function login() {
         $password = md5($this->id . $this->uniqueId);
-
         if($this->main->userOauthModel->identifier == $password) {
             // 刷新全部令牌
             $access = $this->create_access_token();
             $refresh = $this->create_refresh_token([
                 'token' => $access['token']
             ]);
-            return [ $access, $refresh ];
+
+            return [ 
+                'access_token'  => $access, 
+                'refresh_token' => $refresh 
+            ];
         } else {
             return false;
         }

@@ -13,26 +13,9 @@ class CorsRun {
         header('Access-Control-Allow-Credentials: true');
         // 响应头设置
         header('Access-Control-Allow-Headers:*');
-        
+
         if(Request::isOptions()){
-            Response::header([
-                'Access-Control-Allow-Headers' => 'content-type, nonce, sign, timestamp, token',
-                'Access-Control-Max-Age' => '600',
-                'Access-Control-Allow-Origin' => '*'
-            ])->send();
             exit();
         }
-        // 检测来源域名
-        // $info = request::header();
-        // if($info['host'] != 'www.thinkadx-v2.cn') {
-        //     throw new \think\exception\HttpException(404, 'header域名不匹配');
-        // }
-    }
-
-
-    public function appEnd($response){
-        $response->header('Access-Control-Allow-Headers', '*');
-        $response->header('Access-Control-Max-Age', '6000');
-        $response->header('Access-Control-Allow-Origin', '*');
     }
 }

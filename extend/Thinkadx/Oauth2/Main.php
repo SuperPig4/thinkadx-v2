@@ -43,8 +43,10 @@ class Main {
 
 
     // 模式列表
-    const DYNAMIC  = Mode\Dynamic::class;
-    const PASSWORD = Mode\Password::class;
+    const ModeList = [
+        'DYNAMIC'  => Mode\Dynamic::class,
+        'PASSWORD' => Mode\Password::class
+    ];
 
     /**
      * 模型
@@ -72,6 +74,15 @@ class Main {
 
     // 选择模式
     protected function setMode($mode) {
+
+        if(in_array($mode, self::ModeList) === false) {
+            if(isset(self::ModeList[strtoupper($mode)]) === false) {
+                throw new \think\Exception('授权模式异常');
+            } else {
+                $mode = self::ModeList[strtoupper($mode)];
+            }
+        }
+        
         $this->mode = new $mode($this);
     }
 
@@ -254,9 +265,6 @@ class Main {
         }
     }
 
-
-    
-
     /**
      * 创建令牌 - 内部使用
      * @param string $baseToken 基础令牌
@@ -371,7 +379,7 @@ class Main {
 
     /**
      * 初始化
-     * @param object $model 模型
+     * @param string $model 模型
      * @param string $name           列表实例
      */
     static public function init($model, $mode) {

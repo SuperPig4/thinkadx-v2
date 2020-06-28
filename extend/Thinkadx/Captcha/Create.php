@@ -130,7 +130,7 @@ class Create {
 
     // 获得图片
     public function show() {
-		header('Content-type :image/png');
+		header('Content-type:image/png');
 		imagepng($this->img);
     }
     

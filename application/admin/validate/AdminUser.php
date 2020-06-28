@@ -12,7 +12,7 @@ class AdminUser extends Validate
         // 密码
         'password' => 'require|max:34',
         // 授权类型
-        'oauth_type' => 'require|in:pwd',
+        'oauth_type' => 'require|in:password',
         // 授权终端
         'port_type' => 'require|in:api', 
         // 刷新令牌

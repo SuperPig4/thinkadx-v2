@@ -21,7 +21,7 @@ class Login extends Validate {
     ];
 
     protected $scene = [
-        'api_pwd' => ['password', 'verify_key', 'verify_code']
+        'api_password' => ['password', 'verify_key', 'verify_code']
     ];
 
     protected function check_verify($value, $rule, $data) {

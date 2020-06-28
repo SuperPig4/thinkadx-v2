@@ -6,6 +6,7 @@
 namespace app\http\middleware;
 use Thinkadx\ApiAuth\ParamsChcke;
 use think\Controller;
+use Thinkadx\Oauth2\Main;
 
 class ApiAuth extends Controller {
 

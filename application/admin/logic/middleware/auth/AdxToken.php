@@ -38,7 +38,7 @@ class AdxToken extends LogicConstraint{
      * 验证不通过回调
      */
     static public function fail($data = '') {
-        return error($data);
+        // return error($data);
     } 
 
     static public function containerName() {
