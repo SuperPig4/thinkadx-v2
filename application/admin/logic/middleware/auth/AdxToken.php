@@ -2,6 +2,7 @@
 
 namespace app\admin\logic\middleware\auth;
 
+use app\admin\model\AdminOauth;
 use app\http\middleware\auth\LogicConstraint;
 
 class AdxToken extends LogicConstraint{
@@ -43,6 +44,14 @@ class AdxToken extends LogicConstraint{
 
     static public function containerName() {
         return 'adminData';
+    }
+
+    // 缓存配置
+    static public function getStorageConfig() {
+        return [
+            'modelClass' => AdminOauth::class,
+            'model'      => app('adminData')->admin_oauth[0]
+        ];
     }
 
 }

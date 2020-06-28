@@ -8,6 +8,7 @@ namespace app\http\middleware\auth;
 use app\admin\model\AdminOauth;
 use Exception;
 use think\facade\Cache;
+use think\facade\Request;
 use think\facade\Response;
 use Thinkadx\Oauth2\Main as OauthMain;
 
@@ -95,7 +96,12 @@ class AdxToken extends Constraint {
      * 缓存逻辑
      */
     public function storage($data) {
-        error($data);
+        $config = $this->logic::getStorageConfig();
+        OauthMain::init($config['modelClass'], $config['model']->oauth_type)
+        ->setPortType($config['model']->port_type)
+        ->setCacheData($data)
+        ->setOauthModel($config['model'])
+        ->updateCacheData();
     }
 
 }

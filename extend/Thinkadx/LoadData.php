@@ -70,7 +70,7 @@ class LoadData {
 
 
     /**
-     * 同步缓存数据
+     * 同步缓存数据 - 将数据库信息同步到缓存
      * 
      * @param bool $isUpdateCache 是否更新缓存
      */

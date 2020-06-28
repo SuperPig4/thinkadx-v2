@@ -33,7 +33,6 @@ class Main {
             'expire_time' => 8000,
         ],
     ];
-
     // 授权表的用户主键
     protected $tableUserPk;
 
@@ -101,7 +100,10 @@ class Main {
         $this->portType = $name;
     }
 
-    // 设置缓存内容
+    /**
+     * 设置缓存内容
+     * @param array $data
+     */
     protected function setCacheData($data) {
         $this->cacheData = $data;
     }
@@ -242,6 +244,32 @@ class Main {
     }
 
     /**
+     * 重新保存缓存数据
+     * 
+     * - 条件
+     *  - 模型实例
+     *  - 缓存数据
+     * 
+     */
+    protected function updateCacheData() {
+        $cacheDataPrefix       = $this->getCacheDataPrefix();
+        $cachePrefix           = Config::get('cache.redis.prefix');
+        $accessToken           = $cachePrefix . $cacheDataPrefix . '_access_token_' . $this->userOauthModel->access_token;
+        $refreshToken          = $cachePrefix . $cacheDataPrefix . '_refresh_token_' . $this->userOauthModel->refresh_token;
+        $redisHandler          = Cache::store('redis')->handler();
+   
+        if($redisHandler->exists($accessToken)) {
+            $redisHandler->setRange($accessToken, 0, 'think_serialize:' . serialize($this->cacheData));
+        }
+
+        if($redisHandler->exists($refreshToken)) {
+            $refreshData = unserialize(substr($redisHandler->get($refreshToken),16));
+            $refreshData['access_content'] = $this->cacheData;
+            $redisHandler->setRange($refreshToken, 0, 'think_serialize:' .serialize($refreshData));
+        }
+    }
+
+    /**
      * 让相同令牌失效
      * 
      * 条件
@@ -376,6 +404,8 @@ class Main {
             }
         }
     }
+
+    
 
     /**
      * 初始化
