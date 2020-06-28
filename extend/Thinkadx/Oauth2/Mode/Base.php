@@ -24,7 +24,7 @@ abstract class Base {
         $this->main = $e;
     }
 
-    // 登录
+    
     abstract public function login();
 
     // 创建 访问令牌
@@ -32,16 +32,6 @@ abstract class Base {
 
     // 创建 令牌刷新
     abstract public function create_refresh_token($options = []);
-
-    // 创建授权数据
-    // public function create($) {
-    //     $this->main->baseCreate([
-    //         'admin_id'
-    //     ]);
-    // }
-
-    // 访问令牌检测
-    // abstract public function tokenCheck($idAlias, $uniqueIdAlias = null);
 
     // 置参数
     final public function setParams($params) {

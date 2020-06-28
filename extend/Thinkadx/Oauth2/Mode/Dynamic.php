@@ -17,11 +17,11 @@ class Dynamic extends Base{
     /**
      * 登录
      * 
-     *  条件
-     *   - 模型实例
-     * 
-     * @param string $id 标识符 (密码模式=md5(真实密码+各种盐))
-     * @param string $uniqueId 全局唯一标识符(密码模式=盐)
+     * 条件
+     *  - 相对标识符
+     *  - 绝对标识符
+     *  - 缓存数据
+     *  - 模型实例
      * 
      * @return bool/array
      */
@@ -37,13 +37,6 @@ class Dynamic extends Base{
             $refresh = $this->create_refresh_token([
                 'token' => $access['token']
             ]);
-            
-            // $accessValue  = $this->main->createToken($this->main->userOauthModel->id . 'access');
-            // $refreshValue = $this->main->createToken($this->main->userOauthModel->id . 'refresh');
-            // $access = $this->main->resetToken('access', $accessValue);
-            // $refresh = $this->main->resetToken('refresh', $refreshValue, [
-            //     'access_token' => $access['token']
-            // ]);
 
             return [
                 $access,
@@ -53,7 +46,6 @@ class Dynamic extends Base{
             return false;
         }
     }
-
 
     public function create_access_token($options = []) {
         $accessValue  = $this->main->createToken($this->main->userOauthModel->id . 'access');
@@ -66,11 +58,6 @@ class Dynamic extends Base{
             'access_token' => $options['token']
         ]);
     }
-
-    
-
-
-    
 
 }
 

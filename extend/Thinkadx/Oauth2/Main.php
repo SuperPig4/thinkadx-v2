@@ -43,7 +43,8 @@ class Main {
 
 
     // 模式列表
-    const DYNAMIC = Mode\Dynamic::class;
+    const DYNAMIC  = Mode\Dynamic::class;
+    const PASSWORD = Mode\Password::class;
 
     /**
      * 模型
@@ -58,15 +59,8 @@ class Main {
     public function __call($name, $args){
         if(method_exists($this->mode, $name)) {
             $value = call_user_func_array([$this->mode, $name], $args);
-            // if(in_array($name, ['login', 'logout', 'create'])) {
-            // if(strstr($name, 'set') === false) {
-            //     return $value;
-            // }
         } else {
             $value = call_user_func_array([$this, $name], $args);
-            // if(strstr($name, 'set') === false || in_array($name, ['resetToken'])) {
-            //     return $value;
-            // }
         }
 
         if(isset($value)) {
@@ -105,9 +99,23 @@ class Main {
     protected function setTableUserPk($value) {
         $this->tableUserPk = $value;
     }
+
+    // 设置访问令牌过期时间
+    protected function setAccessTokenExpireTime($time) {
+        $this->tokenConfig['access']['expire_time'] = $time;
+    }
+
+    // 设置刷新令牌过期时间
+    protected function setRefreshTokenExpireTime($time) {
+        $this->tokenConfig['refresh']['expire_time'] = $time;
+    }
     
     /**
      * 刷新令牌
+     * 
+     * 条件
+     *  - 授权表和用户表的关联字段 setTableUserPk
+     * 
      * @param string $token 刷新令牌
      * 
      * @return bool/string
@@ -130,7 +138,6 @@ class Main {
 
             // 上锁
             if($redisHandler->set($lockKey, time(), ['NX', 'EX' => 30])) {
-            // if(true) {
                 // 将过期令牌加入白名单 
                 Cache::store('redis')->set($whiteListKey, $refreshContent['access_content'], 300);
                 
@@ -198,6 +205,11 @@ class Main {
 
     /**
      * 检测令牌
+     * 
+     * 条件
+     *  - 相对标识符 setId
+     *  - 绝对标识符 setUniqueId
+     * 
      * @param string $accessToken 访问令牌
      * @return bool
      */
@@ -220,6 +232,10 @@ class Main {
 
     /**
      * 让相同令牌失效
+     * 
+     * 条件
+     *  - 模型实例
+     * 
      * @param bool isAll 删除所有登录方式的令牌
      */
     protected function logout($isAll = false) {
@@ -238,6 +254,9 @@ class Main {
         }
     }
 
+
+    
+
     /**
      * 创建令牌 - 内部使用
      * @param string $baseToken 基础令牌
@@ -252,7 +271,8 @@ class Main {
      * 
      * @param string $tokenType 令牌类型 
      *  desc
-     *      access:访问令牌 refresh:刷新令牌
+     *      access:访问令牌
+     *      refresh:刷新令牌
      * @param string $newToken 新令牌
      * @param array  $option   额外参数
      *  desc
@@ -310,6 +330,44 @@ class Main {
         return strtolower(end($modelName)) . '_' . strtolower($this->mode->getModeName()) . '_' . strtolower($this->portType);
     }
     
+    /**
+     * - 任务计划 - 杀死无效token
+     * desc
+     *  一个时间周期执行一次
+     */
+    static public function taskKillNullToken() {
+
+        $redisHandler          = Cache::store('redis')->handler();
+        $cachePrefix           = Config::get('cache.redis.prefix');
+        $userSetKey            = $cachePrefix . 'user_sorted_set_key_tokens';
+        $tokenTags             = $redisHandler->sMembers($userSetKey);
+        $time                  = time();
+
+        foreach($tokenTags as $val) {
+            // 查找sorted set
+            if($redisHandler->exists($val)) {
+                $tokens = $redisHandler->zRange($val, 0, -1, true);
+                if(count($tokens) > 0) {
+                    $killMin = 0;
+                    $killMax = 0;
+                    foreach($tokens as $tokenVal => $tokenTime) {
+                        if($time >= $tokenTime) {
+                            if(empty($killMin)) {
+                                $killMin = $tokenTime;
+                            } else {
+                                $killMax = $tokenTime;
+                            }
+                        }
+                    }
+                    if($killMin > 0 && $killMax > 0) {
+                        $redisHandler->zRemRangeByScore($val, $killMin, $killMax);
+                    }
+                }
+            } else {
+                $redisHandler->sRem($userSetKey, $val);
+            }
+        }
+    }
 
     /**
      * 初始化
@@ -317,12 +375,10 @@ class Main {
      * @param string $name           列表实例
      */
     static public function init($model, $mode) {
-        // if(gettype($model) != 'object') {
-        //     throw new \Exception('userOauthModel type error');
-        // }
-
         return new self($model, $mode);
     }
+
+    
 
 
 
