@@ -65,6 +65,7 @@ class AdminUser extends Validate
         'detail' => ['id'],
         'index' => ['p'],
         'login' => ['access', 'oauth_type', 'port_type'],
+        'logout' => [''],
         'info' => [''],
         'rese_token' => ['refresh_token', 'old_token'],
         'set_password' => ['oauth_type', 'port_type', 'new_password','id']

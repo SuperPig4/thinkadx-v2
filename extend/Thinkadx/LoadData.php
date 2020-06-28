@@ -25,13 +25,13 @@ class LoadData {
         if($data)   $this->set_data($data);
         if($model)  $this->set_model($model);
         if($pk)     $this->set_pk($pk);
-        if($storageClass)  $this->set_storage_class($storageClass);
+        if($storageClass)  $this->setStorageClass($storageClass);
     }
 
     public function __get($name) {
         // 判断是否为操作模型
         if($name == 'model' && !empty($this->model)) {
-            return $this->get_model();
+            return $this->getModel();
         } else {
             if(property_exists($this->data, $name)) {
                 return $this->data->$name;
@@ -53,7 +53,7 @@ class LoadData {
     /**
      * 初始化模型
      */
-    protected function get_model() {
+    protected function getModel() {
         if(gettype($this->model) == 'string') {
             $pk = $this->pk;
 
@@ -76,7 +76,7 @@ class LoadData {
      */
     protected function sync($isUpdateCache = false) {
         // 初始化
-        $this->get_model();
+        $this->getModel();
         // 同步
         foreach(json_decode(json_encode($this->model),true) as $key=>$val) {
             if(property_exists($this->data, $key) && $this->data->$key != $val) {
@@ -102,7 +102,7 @@ class LoadData {
      * 置存储类
      * 
      */
-    protected function set_storage_class($storageClass) {
+    protected function setStorageClass($storageClass) {
         $this->storageClass = $storageClass;
     }
 
