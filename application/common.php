@@ -1,58 +1,11 @@
 <?php
-// +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2006-2016 http://thinkphp.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: 流年 <liu21st@gmail.com>
-// +----------------------------------------------------------------------
-
-
-
-
-/**
- * 发送请求
- * @param  char  $sendType 发送类型 post/get
- * @param  char  $url      发送地址
- * @param  char/array  $param    发送参数
- * @return array   
- */
-function send_http($url, $sendType, $param = '') {
-	//初始化 curl
-	$curl = curl_init(); 
-    
-	//判断发送请求地址是否为https
-    $urlParams = parse_url($url);
-    //关闭https证书验证
-	if($urlParams['scheme'] == 'https') {
-		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
-		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
-	}
-
-	//设置网站
-	curl_setopt($curl, CURLOPT_URL, $url); 
-	//不输出包头
-	curl_setopt($curl,CURLOPT_HEADER,0);
-	//不输出包头
-	curl_setopt($curl,CURLOPT_RETURNTRANSFER,1); 
-
-	//判断请求是否为post
-	if($sendType == 'post') {
-		curl_setopt($curl,CURLOPT_POST,1);
-	}
-
-    //传输参数
-	if(!empty($param)) {
-		curl_setopt($curl, CURLOPT_SAFE_UPLOAD, false);
-		curl_setopt($curl,CURLOPT_POSTFIELDS,$param); 
-	}
-	
-	$data = curl_exec($curl);
-	curl_close($curl);
-	return $data;
-}
+/* =============================================================================#
+# Autor: 奔跑猪
+# Date: 2020-06-05 16:07:58
+# LastEditors: 奔跑猪
+# LastEditTime: 2020-07-06 16:54:30
+# Description: 
+#============================================================================= */
 
 
 /**

@@ -1,18 +1,19 @@
 <?php
+/* ============================================================================= #
+# Autor: 奔跑猪
+# Date: 2020-07-06 16:31:09
+# LastEditors: 奔跑猪
+# LastEditTime: 2020-07-06 18:01:59
+# Description: 
+# ============================================================================= */
 
 namespace app\admin\logic\middleware\auth;
 
-use app\http\middleware\auth\LogicConstraint;
+use app\http\middleware\LogicAbstract\auth\Session as SessionAbstract; 
 
-class Session extends LogicConstraint{
+class Session extends SessionAbstract {
 
-    /**
-     * 操作对象名
-     */
-    // static public function getActionName() {
-    //     return 'admin';
-    // }
-
+ 
     /**
      * 缓存数据名
      */
@@ -28,17 +29,11 @@ class Session extends LogicConstraint{
     }
 
     /**
-     * 获得主键
-     */
-    static public function getPk() {
-        return 'id';
-    }
-
-    /**
      * 验证不通过回调
      */
     static public function fail($data = '') {
-        echo url('admin/adminUser/login');exit;
+        echo url('admin/adminUser/login');
+        exit;
         // return redirect('http://www.thinkphp.cn');
     } 
 

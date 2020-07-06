@@ -1,7 +1,11 @@
 <?php
-/**
- * adx token验证
- */
+/* ============================================================================= #
+# Autor: 奔跑猪
+# Date: 2020-07-06 16:31:09
+# LastEditors: 奔跑猪
+# LastEditTime: 2020-07-06 17:46:14
+# Description: adx token验证
+# ============================================================================= */
 
 namespace app\http\middleware\auth;
 
@@ -34,58 +38,45 @@ class AdxToken extends Constraint {
             $this->logic = '\\'.$params[0];
 
             $refreshToken = $request->header('refresh-token');
+            $accessToken  = $request->header('token');
             $oauthType    = $request->header('oauth-type');
-            $portType     = $request->header('port_type');
-
+            $portType     = $request->header('port-type');
+            $checkResult  = false;
+            
             try {
+                // 初始化 Oauth
                 if(empty($oauthType) || empty($portType)) {
-                    $this->logic::fail(403);
                     return response()->code(403);
                 }
-                $oauthMain = OauthMain::init(AdminOauth::class, $oauthType);
+                $oauthMain = OauthMain::init($this->logic::getOauthModel(), $oauthType);
             } catch (\Exception $e) {
-                $this->logic::fail('error');
                 return response()->code(404);
             }
 
-            // 判断是否有刷新令牌
             if(empty($refreshToken) == false) {
-                $refreshResult = $oauthMain
-                ->setPortType($portType)
-                ->setTableUserPk('admin_id')
-                ->refresh($refreshToken);
-                
+                // 令牌验证刷新
+                $refreshResult = $oauthMain->setPortType($portType)->setTableUserPk($this->logic::getOauthUserPk())->refresh($refreshToken);
                 if($refreshResult === false) {
-                    $this->logic::fail(403);
-                    return response()->code(403);
+                    return $this->logic::fail(403);
                 } else {
                     $checkResult = $oauthMain->check($refreshResult);
-                    if($checkResult === false) {
-                        $this->logic::fail(403);
-                        return response()->code(403);
-                    } else {
-                        // 装载数据
-                        $this->loadData($request, $checkResult, $this->logic);
+                    if($checkResult !== false) {
+                        // 返回新令牌
                         Response::header('access-token', $refreshResult)->send();
                     }
                 }
+            } else if(empty($accessToken) === false) {
+                // 访问令牌刷新
+                $checkResult = $oauthMain->setPortType($portType)->check($accessToken);
             } else {
-                $token = $request->header('token');
-                if(empty($token)) {
-                    $this->logic::fail(403);
-                    return response()->code(403);
-                } else {
-                    $checkResult = $oauthMain
-                    ->setPortType($portType)
-                    ->check($token);
-                    
-                    if($checkResult === false) {
-                        return response()->code(403);
-                    } else {
-                        // 装载数据
-                        $this->loadData($request, $checkResult, $this->logic);
-                    }
-                }
+                return $this->logic::fail(403);
+            }
+
+            if($checkResult === false) {
+                return $this->logic::fail(403);
+            } else {
+                // 装载数据
+                $this->loadData($request, $checkResult, $this->logic);
             }
         }
 
