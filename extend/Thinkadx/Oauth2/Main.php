@@ -1,10 +1,13 @@
 <?php
-/**
- * 表设计请遵循thinkadx tx_admin_oauth表的结构
- * 注意
- *  目前该版本只支持redis
- * 
- */
+/* ============================================================================= #
+# Autor: 奔跑猪
+# Date: 2020-07-06 16:35:22
+# LastEditors: 奔跑猪
+# LastEditTime: 2020-07-06 22:31:34
+# Description: 
+#        表设计请遵循thinkadx tx_admin_oauth表的结构 
+#        目前该版本只支持redis
+# ============================================================================= */
 namespace Thinkadx\Oauth2;
 
 use think\facade\Cache;
@@ -25,12 +28,12 @@ class Main {
     // 令牌配置
     protected $tokenConfig = [
         'access' => [
-            // 期限
-            'expire_time' => 8000,
+            // 期限,缓存2个小时
+            'expire_time' => 7200,
         ],
         'refresh' => [
-            // 期限
-            'expire_time' => 8000,
+            // 期限,缓存一个星期
+            'expire_time' => 604800,
         ],
     ];
     // 授权表的用户主键

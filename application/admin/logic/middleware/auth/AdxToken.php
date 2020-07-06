@@ -3,7 +3,7 @@
 # Autor: 奔跑猪
 # Date: 2020-07-06 16:31:09
 # LastEditors: 奔跑猪
-# LastEditTime: 2020-07-06 18:01:29
+# LastEditTime: 2020-07-06 22:20:13
 # Description: oauth中间件配置类
 # ============================================================================= */
 
@@ -55,7 +55,7 @@ class AdxToken extends AdxTokenAbstract {
 
     // oauth模型的用户ID字段
     static public function getOauthUserPk() {
-        return 'admin_2id';
+        return 'admin_id';
     }
 
 }
