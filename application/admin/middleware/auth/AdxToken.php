@@ -3,11 +3,11 @@
 # Autor: 奔跑猪
 # Date: 2020-07-06 16:31:09
 # LastEditors: 奔跑猪
-# LastEditTime: 2020-07-06 22:20:13
+# LastEditTime: 2020-07-16 05:40:28
 # Description: oauth中间件配置类
 # ============================================================================= */
 
-namespace app\admin\logic\middleware\auth;
+namespace app\admin\middleware\auth;
 
 use app\admin\model\AdminOauth;
 use app\http\middleware\LogicAbstract\auth\AdxToken as AdxTokenAbstract; 

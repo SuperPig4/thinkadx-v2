@@ -3,11 +3,11 @@
 # Autor: 奔跑猪
 # Date: 2020-07-06 16:31:09
 # LastEditors: 奔跑猪
-# LastEditTime: 2020-07-06 18:01:59
-# Description: 
+# LastEditTime: 2020-07-16 05:40:58
+# Description: session鉴权配置类
 # ============================================================================= */
 
-namespace app\admin\logic\middleware\auth;
+namespace app\admin\middleware\auth;
 
 use app\http\middleware\LogicAbstract\auth\Session as SessionAbstract; 
 

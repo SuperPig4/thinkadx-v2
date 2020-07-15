@@ -3,7 +3,7 @@
 # Autor: 奔跑猪
 # Date: 2020-06-05 16:07:58
 # LastEditors: 奔跑猪
-# LastEditTime: 2020-07-16 05:12:54
+# LastEditTime: 2020-07-16 05:42:00
 # Description: 
 # ============================================================================= */
 
@@ -29,7 +29,7 @@ class Base extends Controller {
                 [
                     \app\http\middleware\AutoValidate::class,
                     [
-                        \app\admin\logic\middleware\AutoValidate::class,
+                        \app\admin\middleware\AutoValidate::class,
                         $this->validateName
                     ]
                 ]

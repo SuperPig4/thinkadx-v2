@@ -1,18 +1,18 @@
 <?php 
-/*
- * @Descripttion: 
- * @version: 
- * @Author: 奔跑猪
- * @Date: 2020-06-14 19:58:10
- * @LastEditTime: 2020-07-15 08:48:34
- */ 
+/* ============================================================================= #
+# Autor: 奔跑猪
+# Date: 2020-07-06 16:31:09
+# LastEditors: 奔跑猪
+# LastEditTime: 2020-07-16 05:41:44
+# Description: 
+# ============================================================================= */
 return [
 
     // 常规session
     // [
     //     \app\http\middleware\auth\Session::class, 
     //     [
-    //         \app\admin\logic\middleware\auth\Session::class,
+    //         \app\admin\middleware\auth\Session::class,
     //         [
     //             'Tool' => ['get_verify_img','get_verify_key'],
     //             // 'Index' => ['index'],
@@ -33,7 +33,7 @@ return [
     [
         \app\http\middleware\auth\AdxToken::class, 
         [
-            \app\admin\logic\middleware\auth\AdxToken::class,
+            \app\admin\middleware\auth\AdxToken::class,
             [
                 'Tool' => ['get_verify_img','get_verify_key'],
                 'Index' => ['index'],
