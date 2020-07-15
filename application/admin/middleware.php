@@ -1,4 +1,11 @@
 <?php 
+/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: 奔跑猪
+ * @Date: 2020-06-14 19:58:10
+ * @LastEditTime: 2020-07-15 08:48:34
+ */ 
 return [
 
     // 常规session
@@ -32,7 +39,7 @@ return [
                 'Index' => ['index'],
                 'AdminUser' => ['login', 'rese_token'],
                 'Upload' => ['index'],
-                'Config' => ['get_system_config'],
+                'Config' => ['get_system_config', 'get_system_config2'],
             ]
         ]
     ], 

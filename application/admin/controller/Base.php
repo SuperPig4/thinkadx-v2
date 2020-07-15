@@ -32,18 +32,14 @@ class Base extends Controller {
      *  基类操作方法 => 日志内容(Array|String)
      */
     // protected $logs = Array | String;
-    
-    public function __construct() {
-        parent::__construct();
-        //验证方法是否存在
+    public function initialize() {
+
+        // 验证方法
         $actionIsHave = method_exists($this, $this->request->action());
         if(empty($actionIsHave)) {
             error('illegal action');
         }
-    }
 
-
-    public function initialize() {
         if(!empty($this->validateName)) {
             $this->middleware = [
                 [
