@@ -1,6 +1,13 @@
 <?php
+/* ============================================================================= #
+# Autor: 奔跑猪
+# Date: 2020-07-16 05:15:52
+# LastEditors: 奔跑猪
+# LastEditTime: 2020-07-16 05:35:40
+# Description: 工具类
+# ============================================================================= */
+namespace app\admin\controller;
 
-namespace app\admin\thinkadx;
 use think\Db;
 use think\Controller;
 use think\Request;

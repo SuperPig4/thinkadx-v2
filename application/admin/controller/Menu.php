@@ -1,20 +1,35 @@
 <?php
-namespace app\admin\thinkadx;
+/* ============================================================================= #
+# Autor: 奔跑猪
+# Date: 2020-07-16 05:15:52
+# LastEditors: 奔跑猪
+# LastEditTime: 2020-07-16 05:35:10
+# Description: 菜单
+# ============================================================================= */
+namespace app\admin\controller;
+
 use think\facade\Request;
-use app\admin\model\AdminMenu;
+use app\admin\model\AdminMenu as AdminMenuModel;
+use app\admin\validate\Menu as MenuValidate;
 use Thinkadx\RuleAuth\Main;
 
 class Menu extends Base {
 
-    protected $validateName = 'Menu';
-    protected $modelName = 'AdminMenu';
+    protected $validateName = MenuValidate::class;
+    protected $modelName    = AdminMenuModel::class;
     protected $logs = [
-        'add' => '新增了栏目',
-        'edit' => '编辑了栏目'
+        'add' => [
+            '新增了栏目',
+            '新增栏目失败'
+        ],
+        'edit' => [
+            '编辑了栏目',
+            '编辑栏目失败'
+        ]
     ];
 
     public function index() {
-        $list = AdminMenu::all();
+        $list = AdminMenuModel::all();
         if(empty($list)) {
             success('ok!',[]);
         } else {
@@ -50,7 +65,7 @@ class Menu extends Base {
     // 删除
     public function delete() {
         $id = $this->request->param('id/d');
-        AdminMenu::where('id', $id)->whereOr('father_id', $id)->delete();
+        AdminMenuModel::where('id', $id)->whereOr('father_id', $id)->delete();
         $this->request->act_log = '删除了菜单分类';
         success('ok!');
     }
@@ -58,7 +73,7 @@ class Menu extends Base {
 
     // 获得列表
     public function get_list() {
-        $list = AdminMenu::where('status', 1)->order('sort DESC')->select();
+        $list = AdminMenuModel::where('status', 1)->order('sort DESC')->select();
         if(empty($list)) {
             success('ok!',[]);
         } else {

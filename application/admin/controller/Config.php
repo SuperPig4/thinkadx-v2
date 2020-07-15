@@ -1,15 +1,31 @@
 <?php
+/* ============================================================================= #
+# Autor: 奔跑猪
+# Date: 2020-07-16 05:15:52
+# LastEditors: 奔跑猪
+# LastEditTime: 2020-07-16 05:32:49
+# Description: 配置
+# ============================================================================= */
 
-namespace app\admin\thinkadx;
+namespace app\admin\controller;
+
 use think\facade\Cache;
 use app\admin\model\Config as ConfigModel;
+use app\admin\validate\Config as ConfigValidate;
 
 class Config extends Base {   
 
-    protected $validateName = true;
+    protected $modelName    = ConfigModel::class;
+    protected $validateName = ConfigValidate::class;
     protected $logs = [
-        'add' => '新增了系统配置',
-        'edit' => '编辑了系统配置'
+        'add' => [
+            '新增了系统配置',
+            '新增系统配置失败'
+        ],
+        'edit' => [
+            '编辑了系统配置',
+            '编辑系统配置失败'
+        ]
     ];
 
     

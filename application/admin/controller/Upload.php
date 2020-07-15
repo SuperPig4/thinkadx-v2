@@ -1,10 +1,18 @@
 <?php
+/* ============================================================================= #
+# Autor: 奔跑猪
+# Date: 2020-07-16 05:15:52
+# LastEditors: 奔跑猪
+# LastEditTime: 2020-07-16 05:36:41
+# Description: 上传控制器
+# ============================================================================= */
+namespace app\admin\controller;
 
-namespace app\admin\thinkadx;
+use app\admin\validate\Upload as UploadValidate;
 
 class Upload extends Base {
 
-    protected $validateName = 'Upload';
+    protected $validateName = UploadValidate::class;
 
     public function index() {
         $file = request()->file('image');

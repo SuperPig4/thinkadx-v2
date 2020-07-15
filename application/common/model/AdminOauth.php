@@ -1,6 +1,7 @@
 <?php
 
-namespace app\admin\model;
+namespace app\common\model;
+
 use think\Model;
 use think\facade\Request;
 use think\facade\Cache;
