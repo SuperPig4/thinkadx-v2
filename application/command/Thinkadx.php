@@ -9,10 +9,10 @@ use think\console\input\Argument;
 use think\console\Output;
 use think\facade\Env;
 use think\Db;
-use app\admin\model\Admin;
-use app\admin\model\AdminOauth;
-use app\admin\model\AdminGroup;
-use app\admin\model\AdminRule;
+use app\common\model\Admin;
+use app\common\model\AdminOauth;
+use app\common\model\AdminGroup;
+use app\common\model\AdminRule;
 use think\Container;
 
 class Thinkadx extends Command
@@ -237,7 +237,7 @@ class Thinkadx extends Command
             'admin_id'          =>  1,
             'identifier'        => '3b1f1f4eafccab421abac7b9bfe056b6',
             'unique_identifier' => '738607423',
-            'oauth_type'        => 'pwd',
+            'oauth_type'        => 'password',
             'port_type'         => 'api',
             'access_token'      => '',
             'refresh_token'              => '',

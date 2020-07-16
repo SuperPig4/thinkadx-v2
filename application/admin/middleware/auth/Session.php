@@ -1,11 +1,11 @@
 <?php
-/* ============================================================================= #
-# Autor: 奔跑猪
-# Date: 2020-07-06 16:31:09
+/* =============================================================================#
+# Author: 奔跑猪
+# Date: 2020-07-16 07:00:03
 # LastEditors: 奔跑猪
-# LastEditTime: 2020-07-16 05:40:58
-# Description: session鉴权配置类
-# ============================================================================= */
+# LastEditTime: 2020-07-16 10:01:09
+# Descripttion: 
+#============================================================================= */
 
 namespace app\admin\middleware\auth;
 
@@ -25,7 +25,7 @@ class Session extends SessionAbstract {
      * 获得模型
      */
     static public function getModel() {
-        return \app\admin\model\Admin::class;
+        return \app\common\model\Admin::class;
     }
 
     /**

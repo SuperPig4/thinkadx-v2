@@ -29,7 +29,10 @@ class AdminLog extends Migrator
     public function change()
     {
         $table = $this->table('admin_log', ['engine' => 'MyISAM', 'comment' => '管理员操作表']);
-        $table->addColumn('admin_id', 'integer')
+        $table->addColumn('admin_id', 'integer', [
+            'default' => '0',
+            'comment' => '管理员ID'
+        ])
         ->addColumn('des', 'string', [
             'default' => '',
             'comment' => '描述'

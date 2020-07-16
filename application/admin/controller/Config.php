@@ -10,7 +10,7 @@
 namespace app\admin\controller;
 
 use think\facade\Cache;
-use app\admin\model\Config as ConfigModel;
+use app\common\model\Config as ConfigModel;
 use app\admin\validate\Config as ConfigValidate;
 
 class Config extends Base {   

@@ -1,15 +1,15 @@
 <?php
-/* ============================================================================= #
-# Autor: 奔跑猪
-# Date: 2020-07-06 16:31:09
+/* =============================================================================#
+# Author: 奔跑猪
+# Date: 2020-07-16 07:00:03
 # LastEditors: 奔跑猪
-# LastEditTime: 2020-07-16 05:40:28
-# Description: oauth中间件配置类
-# ============================================================================= */
+# LastEditTime: 2020-07-16 10:22:16
+# Descripttion: 
+#============================================================================= */
 
 namespace app\admin\middleware\auth;
 
-use app\admin\model\AdminOauth;
+use app\common\model\AdminOauth;
 use app\http\middleware\LogicAbstract\auth\AdxToken as AdxTokenAbstract; 
 
 class AdxToken extends AdxTokenAbstract {
@@ -25,7 +25,7 @@ class AdxToken extends AdxTokenAbstract {
      * 获得模型
      */
     static public function getModel() {
-        return \app\admin\model\Admin::class;
+        return \app\common\model\Admin::class;
     }
 
  

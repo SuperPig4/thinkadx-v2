@@ -1,5 +1,12 @@
 <?php
-namespace app\common\model;
+/* =============================================================================#
+# Author: 奔跑猪
+# Date: 2020-07-16 07:00:03
+# LastEditors: 奔跑猪
+# LastEditTime: 2020-07-16 10:21:07
+# Descripttion: 
+#============================================================================= */
+namespace app\admin\model;
 
 use think\Model;
 
@@ -16,8 +23,16 @@ class AdminLog extends Model {
     } 
 
 
-    protected function setAdminIdAttr() {
-        return USER_ID;
+    protected function setAdminIdAttr($value) {
+        try {
+            if(empty($value)) {
+                return app('admin')->id;
+            } else {
+                return $value;
+            }
+        } catch(\Exception $e) {
+            return '';
+        }
     }
 
     protected function setIpAttr() {

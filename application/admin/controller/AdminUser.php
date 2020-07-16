@@ -11,8 +11,8 @@ namespace app\admin\controller;
 
 use think\facade\Cache;
 use think\Db;
-use app\admin\model\Admin as AdminModel;
-use app\admin\model\AdminOauth as AdminOauthModel;
+use app\common\model\Admin as AdminModel;
+use app\common\model\AdminOauth as AdminOauthModel;
 use app\admin\validate\AdminUser as AdminUserValidate;
 use Thinkadx\Oauth2\Main;
 
@@ -168,6 +168,7 @@ class AdminUser extends Base {
 
         $user = AdminModel::where('access', $data['access'])->find();
         if(empty($user)) {
+            $this->request->act_log = '尝试登陆';
             error('请输入正确的账号');
         } else {
             $oauth = $user->adminOauth()->where([
@@ -175,6 +176,12 @@ class AdminUser extends Base {
                 'oauth_type' => $data['oauth_type']
             ])->find();
             if(is_null($oauth)) {
+                $this->request->act_log = [
+                    [
+                        'admin_id' => $user->id,
+                        'des' => '未找到该登录方式'
+                    ]
+                ];
                 error('未找到该登录方式');
             } else {
                 $loginResult = Main::init(AdminOauthModel::class, Main::ModeList['PASSWORD'])
@@ -192,7 +199,13 @@ class AdminUser extends Base {
                 $this->request->act_log = '登陆成功';
                 success('ok!', $loginResult);
             } else {
-                error('登录异常');
+                $this->request->act_log = [
+                    [
+                        'admin_id' => $user->id,
+                        'des' => '密码错误或其他异常'
+                    ]
+                ];
+                error('密码错误或其他异常');
             }
         }
     }

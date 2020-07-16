@@ -9,7 +9,7 @@
 namespace app\admin\controller;
 
 use think\facade\Request;
-use app\admin\model\AdminMenu as AdminMenuModel;
+use app\common\model\AdminMenu as AdminMenuModel;
 use app\admin\validate\Menu as MenuValidate;
 use Thinkadx\RuleAuth\Main;
 
