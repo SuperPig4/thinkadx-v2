@@ -1,12 +1,11 @@
 <?php
-/* ============================================================================= #
-# Autor: 奔跑猪
-# Date: 2020-07-06 16:31:09
+/* =============================================================================#
+# Author: 奔跑猪
+# Date: 2020-06-14 19:58:10
 # LastEditors: 奔跑猪
-# LastEditTime: 2020-07-06 17:46:14
-# Description: adx token验证
-# ============================================================================= */
-
+# LastEditTime: 2020-07-17 08:31:41
+# Descripttion: adx token验证
+#============================================================================= */
 namespace app\http\middleware\auth;
 
 use app\admin\model\AdminOauth;
@@ -31,12 +30,13 @@ class AdxToken extends Constraint {
      *      参数一 逻辑类
      *      参数二 忽略列表
      */
-    public function handle($request, \Closure $next, $params) {
+    public function handle($request, \Closure $next, $logic) {
+        // 逻辑
+        $this->logic      = $logic;
         // 判断是否忽略
-        if(isset($params[1])) $this->ignoreList = $params[1];
+        $this->ignoreList = $logic::getgetIgnores();
+        
         if(!$this->ignore_check()) {
-            $this->logic = '\\'.$params[0];
-
             $refreshToken = $request->header('refresh-token');
             $accessToken  = $request->header('token');
             $oauthType    = $request->header('oauth-type');

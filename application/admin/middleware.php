@@ -3,7 +3,7 @@
 # Author: 奔跑猪
 # Date: 2020-06-14 19:58:10
 # LastEditors: 奔跑猪
-# LastEditTime: 2020-07-16 09:57:47
+# LastEditTime: 2020-07-17 08:29:27
 # Descripttion: 
 #============================================================================= */
 
@@ -12,39 +12,20 @@ return [
     // 常规session
     // [
     //     \app\http\middleware\auth\Session::class, 
-    //     [
-    //         \app\admin\middleware\auth\Session::class,
-    //         [
-    //             'Tool' => ['get_verify_img','get_verify_key'],
-    //             // 'Index' => ['index'],
-    //             'AdminUser' => ['login', 'rese_token'],
-    //             'Upload' => ['index'],
-    //             'Config' => ['get_system_config'],
-    //         ]
-    //     ]
+    //     \app\admin\middleware\auth\Session::class,
     // ], 
 
-    // API鉴权 + token验证
+    // API鉴权
     [
         \app\http\middleware\ApiAuth::class, 
-        [
-            'Tool' => ['get_verify_img']
-        ]
-    ], 
-    [
-        \app\http\middleware\auth\AdxToken::class, 
-        [
-            \app\admin\middleware\auth\AdxToken::class,
-            [
-                'Tool' => ['get_verify_img','get_verify_key'],
-                'Index' => ['index'],
-                'AdminUser' => ['login', 'rese_token'],
-                'Upload' => ['index'],
-                'Config' => ['get_system_config', 'get_system_config2'],
-            ]
-        ]
+        \app\admin\middleware\ApiAuth::class
     ], 
 
+    //  token验证
+    [
+        \app\http\middleware\auth\AdxToken::class, 
+        \app\admin\middleware\auth\AdxToken::class,
+    ], 
 
     // 操作后的日志写入
     [

@@ -3,7 +3,7 @@
 # Author: 奔跑猪
 # Date: 2020-07-16 07:00:03
 # LastEditors: 奔跑猪
-# LastEditTime: 2020-07-16 10:22:16
+# LastEditTime: 2020-07-17 08:29:00
 # Descripttion: 
 #============================================================================= */
 
@@ -58,4 +58,16 @@ class AdxToken extends AdxTokenAbstract {
         return 'admin_id';
     }
 
+    /**
+     * 忽略
+     */
+    static public function getIgnores() {
+        return [
+            'Tool' => ['get_verify_img','get_verify_key'],
+            'Index' => ['index'],
+            'AdminUser' => ['login', 'rese_token'],
+            'Upload' => ['index'],
+            'Config' => ['get_system_config', 'get_system_config2'],
+        ];
+    }
 }

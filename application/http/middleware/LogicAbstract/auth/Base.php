@@ -25,7 +25,6 @@ abstract class Base {
      */
     abstract static public function getModel();
 
-
     /**
      * 验证不通过回调
      */
@@ -36,6 +35,11 @@ abstract class Base {
      */
     static public function getPk() {
         return 'id';
+    }
+
+    // 忽略URL
+    static public function getIgnores() {
+        return [];
     }
 
 }

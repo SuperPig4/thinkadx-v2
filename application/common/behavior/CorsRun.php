@@ -1,4 +1,11 @@
 <?php
+/* =============================================================================#
+# Author: 奔跑猪
+# Date: 2020-06-06 10:01:21
+# LastEditors: 奔跑猪
+# LastEditTime: 2020-07-17 08:14:20
+# Descripttion: 
+#============================================================================= */
 namespace app\common\behavior;
 use think\facade\Request;
 use think\facade\Response;
@@ -18,4 +25,8 @@ class CorsRun {
             exit();
         }
     }
+
+    // public function appEnd() {
+    //     echo '结束了';
+    // }
 }
