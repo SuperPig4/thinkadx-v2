@@ -278,6 +278,15 @@ class Thinkadx extends Command
                 'description'     => '后台系统名称',
             ],
         ]);
+
+        // admin_api
+        Db::name('admin_api')->insert([
+            'appid'               => 'xb4nBB6ZfEN7njAnlJHMRuR8',
+            'appsecret'           => 'u6ucLCg9RWXRDm6TiEeYBhHK',
+            'status'              => '1',
+            'update_time'         => $timeStr,
+            'create_time'         => $timeStr
+        ]);
     }
 
 }
