@@ -3,7 +3,7 @@
 # Author: 奔跑猪
 # Date: 2020-06-14 19:58:10
 # LastEditors: 奔跑猪
-# LastEditTime: 2020-07-17 08:32:08
+# LastEditTime: 2020-07-18 08:35:25
 # Descripttion: session权限检测
 #============================================================================= */
 namespace app\http\middleware\auth;
@@ -29,7 +29,7 @@ class Session extends Constraint {
         // 判断是否忽略
         $this->logic      = $logic;
         // 判断是否忽略
-        $this->ignoreList = $logic::getgetIgnores();
+        $this->ignoreList = $logic::getIgnores();
         
         if(isset($params[1])) $this->ignoreList = $params[1];
         if(!$this->ignore_check()) {

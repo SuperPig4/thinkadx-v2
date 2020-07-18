@@ -3,7 +3,7 @@
 # Author: 奔跑猪
 # Date: 2020-06-14 19:58:10
 # LastEditors: 奔跑猪
-# LastEditTime: 2020-07-17 08:31:41
+# LastEditTime: 2020-07-18 07:18:11
 # Descripttion: adx token验证
 #============================================================================= */
 namespace app\http\middleware\auth;
@@ -34,7 +34,7 @@ class AdxToken extends Constraint {
         // 逻辑
         $this->logic      = $logic;
         // 判断是否忽略
-        $this->ignoreList = $logic::getgetIgnores();
+        $this->ignoreList = $logic::getIgnores();
         
         if(!$this->ignore_check()) {
             $refreshToken = $request->header('refresh-token');
@@ -46,7 +46,7 @@ class AdxToken extends Constraint {
             try {
                 // 初始化 Oauth
                 if(empty($oauthType) || empty($portType)) {
-                    return response()->code(403);
+                    return response()->code(401);
                 }
                 $oauthMain = OauthMain::init($this->logic::getOauthModel(), $oauthType);
             } catch (\Exception $e) {
@@ -57,7 +57,7 @@ class AdxToken extends Constraint {
                 // 令牌验证刷新
                 $refreshResult = $oauthMain->setPortType($portType)->setTableUserPk($this->logic::getOauthUserPk())->refresh($refreshToken);
                 if($refreshResult === false) {
-                    return $this->logic::fail(403);
+                    return $this->logic::fail(401);
                 } else {
                     $checkResult = $oauthMain->check($refreshResult);
                     if($checkResult !== false) {
@@ -69,11 +69,11 @@ class AdxToken extends Constraint {
                 // 访问令牌刷新
                 $checkResult = $oauthMain->setPortType($portType)->check($accessToken);
             } else {
-                return $this->logic::fail(403);
+                return $this->logic::fail(401);
             }
 
             if($checkResult === false) {
-                return $this->logic::fail(403);
+                return $this->logic::fail(401);
             } else {
                 // 装载数据
                 $this->loadData($request, $checkResult, $this->logic);

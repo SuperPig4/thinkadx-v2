@@ -3,7 +3,7 @@
 # Author: 奔跑猪
 # Date: 2020-06-14 19:58:10
 # LastEditors: 奔跑猪
-# LastEditTime: 2020-07-17 08:25:43
+# LastEditTime: 2020-07-18 07:18:22
 # Descripttion: 接口鉴权中间件
 #============================================================================= */
 namespace app\http\middleware;
@@ -19,7 +19,7 @@ class ApiAuth extends Controller {
             $appid = $request->header('appid');
             $model = $logic::getModel();
             if(empty($appid)) {
-                error('appid不能为空', [], 403);
+                error('appid不能为空', [], 401);
             }
 
             $api = $model::where('appid', $appid)->cache(true)->find();
