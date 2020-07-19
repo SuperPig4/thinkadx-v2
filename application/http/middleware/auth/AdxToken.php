@@ -3,7 +3,7 @@
 # Author: 奔跑猪
 # Date: 2020-06-14 19:58:10
 # LastEditors: 奔跑猪
-# LastEditTime: 2020-07-18 07:18:11
+# LastEditTime: 2020-07-19 10:38:05
 # Descripttion: adx token验证
 #============================================================================= */
 namespace app\http\middleware\auth;
@@ -31,6 +31,9 @@ class AdxToken extends Constraint {
      *      参数二 忽略列表
      */
     public function handle($request, \Closure $next, $logic) {
+        // 设置响应头
+        header('Access-Control-Expose-Headers: access-token, access-token-expire-time');
+        
         // 逻辑
         $this->logic      = $logic;
         // 判断是否忽略
@@ -59,10 +62,11 @@ class AdxToken extends Constraint {
                 if($refreshResult === false) {
                     return $this->logic::fail(401);
                 } else {
-                    $checkResult = $oauthMain->check($refreshResult);
+                    $checkResult = $oauthMain->check($refreshResult['token']);
                     if($checkResult !== false) {
                         // 返回新令牌
-                        Response::header('access-token', $refreshResult)->send();
+                        Response::header('access-token', $refreshResult['token'])->send();
+                        Response::header('access-token-expire-time', $refreshResult['expire_time'])->send();
                     }
                 }
             } else if(empty($accessToken) === false) {

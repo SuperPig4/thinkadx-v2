@@ -3,7 +3,7 @@
 # Author: 奔跑猪
 # Date: 2020-07-17 02:52:58
 # LastEditors: 奔跑猪
-# LastEditTime: 2020-07-17 08:20:16
+# LastEditTime: 2020-07-19 09:12:04
 # Descripttion: API鉴权 
                 签名流程 -> strtoupper(md5($appid . $timestamp . $appsecret))
                             url拼接->md5->转小写
@@ -23,12 +23,14 @@ class ApiAuth {
     private $appid;
     // 密钥
     private $appsecret;
-    // 时间戳
+    // 时间戳 - 微秒
     private $timestamp;
     // 签名
     private $sign;
+    // 随机数
+    private $nonce;
     // url有效期
-    private $timeOut = 120;
+    private $timeOut = 30;
 
     // 实例化对象
     private static $e;
@@ -39,11 +41,12 @@ class ApiAuth {
      */
     protected function autoSetParams() {
         $header = Request::header();
-        if(empty($header['timestamp']) || empty($header['sign'])) {
+        if(empty($header['timestamp']) || empty($header['nonce']) || empty($header['sign'])) {
             throw new \think\Exception('缺少验证参数', 1000);
         }
 
         $this->timestamp = $header['timestamp'];
+        $this->nonce = $header['nonce'];
         $this->sign = $header['sign'];
 
         return $this;
@@ -79,7 +82,7 @@ class ApiAuth {
         }
         
         // 缓存
-        $name = 'appid=' . $this->appid . '/time_out=' . $this->timeOut . '/sign=' . $this->sign;
+        $name = 'appid=' . $this->appid . '/time_out=' . $this->timeOut . '/nonce='. $this->nonce .'/sign=' . $this->sign;
         Cache::store('redis')->set($name, time(), $this->timeOut);
         
         return true;
@@ -95,6 +98,7 @@ class ApiAuth {
         $signData = http_build_query([
             'appid' => $this->appid,
             'timestamp' => $this->timestamp,
+            'nonce' => $this->nonce,
             'appsecret' => $this->appsecret,
         ]);
         
@@ -112,7 +116,7 @@ class ApiAuth {
      * @return bool/string
      */
     protected function checkRepeat() {
-        $name = 'appid=' . $this->appid . '/time_out=' . $this->timeOut . '/sign=' . $this->sign;
+        $name = 'appid=' . $this->appid . '/time_out=' . $this->timeOut . '/nonce=' . $this->nonce . '/sign=' . $this->sign;
         if(Cache::store('redis')->get($name)) {
             return '链接已被使用';
         } else {
@@ -156,6 +160,14 @@ class ApiAuth {
      */
     protected function setTimestamp($value) {
         $this->timestamp = $value;
+    }
+    
+
+    /**
+     * 设置随机数
+     */
+    protected function setNonce($value) {
+        $this->nonce = $value;
     }
 
     

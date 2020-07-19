@@ -38,6 +38,8 @@ class Main {
     ];
     // 授权表的用户主键
     protected $tableUserPk;
+    // 白名单生命周期
+    protected $whiteListExpireTime = 60;
 
 
     // redis句柄
@@ -149,13 +151,16 @@ class Main {
             $refreshContent  = unserialize(Cache::store('redis')->get($refreshToken));
             $whiteListKey = $cacheDataPrefix . '_access_token_whitelist_' . $refreshContent['access_token'];
             if(time() < $refreshContent['access_expire_time']) {
-                return $refreshContent['access_token'];
+                return [
+                    'token' => $refreshContent['access_token'],
+                    'expire_time' => $refreshContent['access_expire_time_z']
+                ];
             }
 
             // 上锁
             if($redisHandler->set($lockKey, time(), ['NX', 'EX' => 30])) {
                 // 将过期令牌加入白名单 
-                Cache::store('redis')->set($whiteListKey, $refreshContent['access_content'], 300);
+                Cache::store('redis')->set($whiteListKey, $refreshContent['access_content'], $this->whiteListExpireTime);
                 
                 $oauth = $this->baseQuery([
                     $this->tableUserPk => $refreshContent['access_content']['id'],
@@ -172,18 +177,22 @@ class Main {
                 $this->setCacheData($refreshContent['access_content']);
                 $newToken = $this->create_access_token();
                 $refreshContent['access_token'] = $newToken['token'];
-                $refreshContent['access_expire_time'] = time() + $newToken['expire_time'];
+                $refreshContent['access_expire_time']   = time() + $newToken['expire_time'];
+                $refreshContent['access_expire_time_z'] = $newToken['expire_time'];
                 $redisHandler->setRange($cachePrefix . $refreshToken, 0, serialize($refreshContent));
 
                 // 释放
                 $redisHandler->del($lockKey);
-                return $newToken['token'];
+                return $newToken;
             } else {
                 // 并发一般都会在这里 hold住 请求
-                sleep(3);
+                sleep(1);
                 $refreshContent  = unserialize(Cache::store('redis')->get($refreshToken));
                 if($this->check($refreshContent['access_token']) !== false || Cache::store('redis')->has($whiteListKey)) {
-                    return $refreshContent['access_token'];
+                    return [
+                        'token' => $refreshContent['access_token'],
+                        'expire_time' => $refreshContent['access_expire_time_z']
+                    ];
                 } 
             }
         }
@@ -344,9 +353,11 @@ class Main {
         } else if($tokenType == 'refresh') {
             $accessExpireTime = time() + $this->tokenConfig['access']['expire_time'];
             $content = serialize([
-                'access_content'     => empty($option['access_content']) ? $this->cacheData : $option['access_content'],
-                'access_token'       => $option['access_token'],
-                'access_expire_time' => $accessExpireTime,
+                'access_content'       => empty($option['access_content']) ? $this->cacheData : $option['access_content'],
+                'access_token'         => $option['access_token'],
+                'access_expire_time'   => $accessExpireTime,
+                // 生存秒数
+                'access_expire_time_z' => $this->tokenConfig['access']['expire_time']
             ]);
             // $content = isset($option['access_token']) ? $option['access_token'] . '_' . $accessExpireTime : '';
         }

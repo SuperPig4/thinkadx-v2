@@ -39,8 +39,8 @@ class Dynamic extends Base{
             ]);
 
             return [ 
-                'access_token'  => $access, 
-                'refresh_token' => $refresh 
+                'access'  => $access, 
+                'refresh' => $refresh 
             ];
         } else {
             return false;
