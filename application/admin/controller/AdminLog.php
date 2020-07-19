@@ -1,15 +1,15 @@
 <?php
-/* ============================================================================= #
-# Autor: 奔跑猪
-# Date: 2020-07-16 05:15:52
+/* =============================================================================#
+# Author: 奔跑猪
+# Date: 2020-07-16 07:00:03
 # LastEditors: 奔跑猪
-# LastEditTime: 2020-07-16 05:31:17
-# Description: 操作日志
-# ============================================================================= */
+# LastEditTime: 2020-07-19 11:28:44
+# Descripttion: 
+#============================================================================= */
 
 namespace app\admin\controller;
 
-use app\common\model\AdminLog as AdminLogModel;
+use app\admin\model\AdminLog as AdminLogModel;
 use app\admin\validate\AdminLog as AdminLogValidate;
 
 class AdminLog extends Base {

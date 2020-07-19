@@ -3,11 +3,12 @@
 # Author: 奔跑猪
 # Date: 2020-07-16 07:00:03
 # LastEditors: 奔跑猪
-# LastEditTime: 2020-07-16 10:21:07
+# LastEditTime: 2020-07-19 11:04:20
 # Descripttion: 
 #============================================================================= */
 namespace app\admin\model;
 
+use app\common\model\Admin;
 use think\Model;
 
 class AdminLog extends Model {
@@ -19,7 +20,7 @@ class AdminLog extends Model {
     protected $insert = ['admin_id', 'ip', 'module', 'controller', 'action'];  
 
     public function admin() {
-        return $this->belongsTo('admin');
+        return $this->belongsTo(Admin::class);
     } 
 
 
