@@ -15,6 +15,8 @@ use app\common\model\Admin as AdminModel;
 use app\common\model\AdminOauth as AdminOauthModel;
 use app\admin\validate\AdminUser as AdminUserValidate;
 use Thinkadx\Oauth2\Main;
+use Thinkadx\LoadData;
+use app\admin\middleware\auth\AdxToken;
 
 class AdminUser extends Base {
     
@@ -118,7 +120,7 @@ class AdminUser extends Base {
             error('非法操作');
         }
      
-        if(USER_ID != 1) {
+        if(app('adminData')->id != 1) {
             if(empty($data['old_password'])) {
                 error('请输入旧密码');
             } else if(!empty($data['id'])) {
@@ -126,7 +128,7 @@ class AdminUser extends Base {
             }
         }
 
-        $user = AdminModel::get(empty($data['id']) ? USER_ID : $data['id']);
+        $user = AdminModel::get(empty($data['id']) ? app('adminData')->id : $data['id']);
         $oauthInfo = $user->adminOauth()->where([
             'oauth_type' => $data['oauth_type'],
             'port_type' => $data['port_type']
@@ -153,7 +155,7 @@ class AdminUser extends Base {
 
     // 获得用户信息
     public function info() {
-        $userInfo = AdminModel::get(USER_ID);
+        $userInfo = AdminModel::get(app('adminData')->id);
         success('ok!',$userInfo);
     }
 
@@ -184,18 +186,39 @@ class AdminUser extends Base {
                 ];
                 error('未找到该登录方式');
             } else {
-                $loginResult = Main::init(AdminOauthModel::class, Main::ModeList['PASSWORD'])
+                // $loginResult = Main::init(AdminOauthModel::class, Main::ModeList['PASSWORD'])
+                // ->setPortType('api')
+                // ->setId($data['password'])
+                // ->setUniqueId($oauth->unique_identifier)
+                // ->setCacheData($user->toArray())
+                // ->setOauthModel($oauth)
+                // ->logout()
+                // ->login();
+
+                $oauth = Main::init(AdminOauthModel::class, Main::ModeList['PASSWORD'])
                 ->setPortType('api')
                 ->setId($data['password'])
                 ->setUniqueId($oauth->unique_identifier)
                 ->setCacheData($user->toArray())
-                ->setOauthModel($oauth)
-                ->logout()
-                ->login();
+                ->setOauthModel($oauth);
+
+                $loginResult = $oauth->login();
             }
 
             if(is_array($loginResult)) {
-                define('USER_ID', $oauth->admin_id);
+                // 下线其他令牌
+                $oauth->logout();
+
+                // 默认token登录,如果是session的话这里也要改
+                // 绑定容器
+                $name = method_exists(AdxToken::class, 'containerName') ?  AdxToken::containerName() : 'loadData' ;
+                bind($name, new LoadData(
+                    $user->toArray(), 
+                    AdxToken::getModel(), 
+                    $this, 
+                    AdxToken::getPk()
+                ));
+
                 $this->request->act_log = '登陆成功';
                 success('ok!', $loginResult);
             } else {

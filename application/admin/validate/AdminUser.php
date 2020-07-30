@@ -61,7 +61,8 @@ class AdminUser extends Validate
 
     protected $scene = [
         'delete' => ['delete_id'],
-        'add_edit' => ['avatar', 'group_id', 'nickname', 'status', 'access'],
+        'add' => ['avatar', 'group_id', 'nickname', 'status', 'access'],
+        'edit' => ['id', 'avatar', 'group_id', 'nickname', 'status', 'access'],
         'detail' => ['id'],
         'index' => ['p'],
         'login' => ['access', 'oauth_type', 'port_type'],

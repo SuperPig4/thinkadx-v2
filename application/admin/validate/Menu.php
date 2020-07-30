@@ -44,7 +44,8 @@ class Menu extends Validate {
         'delete' => ['id'],
         'index' => [''],
         'detail' => ['id'],
-        'add_edit' => ['icon', 'title', 'module', 'controller', 'action', 'father_id', 'sort']
+        'add' => ['icon', 'title', 'module', 'controller', 'action', 'father_id', 'sort'],
+        'edit' => ['id', 'icon', 'title', 'module', 'controller', 'action', 'father_id', 'sort']
     ];
 
 

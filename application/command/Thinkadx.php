@@ -219,17 +219,7 @@ class Thinkadx extends Command
                 'status'      => 1,
                 'father_id'   => 1,
                 'create_time' => $timeStr,
-            ],
-            [
-                'icon'        => '',
-                'title'       => '清除过期缓存',
-                'module'      => 'admin',
-                'controller'  => 'tool',
-                'action'      => 'empty_expired_cache',
-                'status'      => 1,
-                'father_id'   => 1,
-                'create_time' => $timeStr,
-            ],
+            ]
         ]);
 
         // admin_oauth

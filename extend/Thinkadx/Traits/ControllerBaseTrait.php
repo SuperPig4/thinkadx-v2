@@ -137,7 +137,7 @@ trait ControllerBaseTrait {
         $params = $this->getParams();
         $db     = $this->getModelOrDb();
         $dbType = $this->getModelOrDb(true);
-        $id     = $params['id'];
+        $id     = $params['id'] ?? '';
         
         // 执行操作
         if($dbType == 'model') {

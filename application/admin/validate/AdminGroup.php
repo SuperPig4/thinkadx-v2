@@ -1,7 +1,8 @@
 <?php
 
 namespace app\admin\validate;
-use app\admin\model\Admin as AdminModel;
+
+use app\common\model\Admin as AdminModel;
 use think\Validate;
 
 class AdminGroup extends Validate {
@@ -23,7 +24,8 @@ class AdminGroup extends Validate {
     ];
 
     protected $scene = [
-        'add_edit' => ['name'],
+        'add' => ['name'],
+        'edit' => ['id', 'name'],
         'detail' => ['id'],
         'index' => ['p'],
     ];

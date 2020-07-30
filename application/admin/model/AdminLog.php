@@ -3,7 +3,7 @@
 # Author: 奔跑猪
 # Date: 2020-07-16 07:00:03
 # LastEditors: 奔跑猪
-# LastEditTime: 2020-07-19 11:04:20
+# LastEditTime: 2020-07-31 01:42:39
 # Descripttion: 
 #============================================================================= */
 namespace app\admin\model;
@@ -16,7 +16,7 @@ class AdminLog extends Model {
     protected $autoWriteTimestamp  = true;
     protected $updateTime   = false;
     protected $createTime = 'act_time';
-
+    protected $dateFormat = 'Y-m-d H:i:s';
     protected $insert = ['admin_id', 'ip', 'module', 'controller', 'action'];  
 
     public function admin() {
@@ -27,7 +27,7 @@ class AdminLog extends Model {
     protected function setAdminIdAttr($value) {
         try {
             if(empty($value)) {
-                return app('admin')->id;
+                return app('adminData')->id;
             } else {
                 return $value;
             }
@@ -52,5 +52,5 @@ class AdminLog extends Model {
         return request()->action(true);
     }
 
-
+    
 }

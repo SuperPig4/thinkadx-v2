@@ -40,6 +40,11 @@ class Main {
     protected $tableUserPk;
     // 白名单生命周期
     protected $whiteListExpireTime = 60;
+ 
+    // 当前生成的访问令牌key
+    protected $accessTokenKey;
+    // 当前生成的刷新令牌key
+    protected $refreshTokenKey;
 
 
     // redis句柄
@@ -297,8 +302,13 @@ class Main {
         
         if($isAll === false) {
             foreach($allToken as $val) {
-                Cache::store('redis')->rm($val);
-                Cache::store('redis')->handler()->zrem($userSortedSetKey, $val);
+                if(in_array($val ,[
+                    $this->accessTokenKey, 
+                    $this->refreshTokenKey
+                ]) === false) {
+                    Cache::store('redis')->rm($val);
+                    Cache::store('redis')->handler()->zrem($userSortedSetKey, $val);
+                }
             }
         } else {
             // 暂不支持
@@ -349,8 +359,10 @@ class Main {
         // 根据令牌类型决定缓存内容
         $content = '';
         if($tokenType == 'access') {
+            $this->accessTokenKey = $tokenKey;
             $content = $this->cacheData;
         } else if($tokenType == 'refresh') {
+            $this->refreshTokenKey = $tokenKey;
             $accessExpireTime = time() + $this->tokenConfig['access']['expire_time'];
             $content = serialize([
                 'access_content'       => empty($option['access_content']) ? $this->cacheData : $option['access_content'],

@@ -1,7 +1,8 @@
 <?php
 
 namespace app\admin\validate;
-use app\admin\model\AdminGroup as AdminGroupModel;
+
+use app\common\model\AdminGroup as AdminGroupModel;
 use think\Validate;
 use think\Db;
 
@@ -26,7 +27,8 @@ class AdminRule extends Validate {
 
 
     protected $scene = [
-        'add_edit' => ['des'],
+        'add' => ['des'],
+        'edit' => ['id', 'des'],
         'detail' => ['id'],
         'index' => ['p'],
     ];

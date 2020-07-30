@@ -3,7 +3,7 @@
 # Author: 奔跑猪
 # Date: 2020-07-16 07:00:03
 # LastEditors: 奔跑猪
-# LastEditTime: 2020-07-19 11:28:44
+# LastEditTime: 2020-07-31 01:42:31
 # Descripttion: 
 #============================================================================= */
 
@@ -21,7 +21,8 @@ class AdminLog extends Base {
         if(!empty($data['search'])) {
             $db = $db->where('id|admin_id', 'like', '%'.$data['search'].'%');
         }
-        return $db->with('admin');
+        
+        return $db->with('admin')->order('id desc');
     }
 
 }

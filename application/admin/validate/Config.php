@@ -1,7 +1,7 @@
 <?php
 
 namespace app\admin\validate;
-use app\admin\model\Config as ConfigModel;
+use app\common\model\Config as ConfigModel;
 use think\Validate;
 
 class Config extends Validate
@@ -38,7 +38,8 @@ class Config extends Validate
 
     protected $scene = [
         'get_system_config' => [''],
-        'add_edit' => ['name', 'alias', 'type', 'description'],
+        'add' => ['name', 'alias', 'type', 'description'],
+        'edit' => ['id', 'name', 'alias', 'type', 'description'],
         'detail' => ['id'],
         'index' => ['p'],
     ];

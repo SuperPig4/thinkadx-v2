@@ -35,7 +35,7 @@ class Menu extends Base {
         } else {
             $mapping = [];
             $list = $list->toArray();
-            $ruleAuth = new Main('admin_rule', 'admin_group', 'admin', USER_ID);
+            $ruleAuth = new Main('admin_rule', 'admin_group', 'admin', app('adminData')->id);
             foreach($list as $key=>&$val) {
                 if($val['father_id'] != 0) {
                     $check = $ruleAuth->check($val['module'], $val['controller'], $val['action']);
@@ -79,7 +79,7 @@ class Menu extends Base {
         } else {
             $mapping = [];
             $list = $list->toArray();
-            $ruleAuth = new Main('admin_rule', 'admin_group', 'admin', USER_ID);
+            $ruleAuth = new Main('admin_rule', 'admin_group', 'admin', app('adminData')->id);
             foreach($list as $key=>&$val) {
                 if($val['father_id'] != 0) {
                     $check = $ruleAuth->check($val['module'], $val['controller'], $val['action']);
