@@ -9,39 +9,74 @@
 namespace app\admin\controller;
 
 use think\Db;
-use think\Controller;
-use think\Request;
-use think\facade\App;
 use think\Container;
 use Thinkadx\Captcha\Main as CaptchaMain;
+use Carbon\Carbon;
 
 class Tool extends Base {
 
     public function main() {
-        $today = strtotime(date("Y-m-d"),time());
+   
+        // 统计
         $count = [
+            // 管理员总数
             'admin' => Db::name('admin')->count(),
-            'actLog' => Db::name('adminLog')->where('act_time', '>', $today)->count(),
-            'ThinkPHP版本'=>App::version()
+            // 操作日志总数
+            'action_log' => Db::name('adminLog')->count(),
+            // 登录成功总数
+            'login_success' => Db::name('adminLog')->where('des', '登陆成功')->count(),
+            // 登录失败总数
+            'login_fail' => Db::name('adminLog')->where('des','<>','登陆成功')->count()
         ];
 
-        $info = array(
-            ['name' => '操作系统', 'value'=> PHP_OS],
-            ['name' => '运行环境', 'value'=> $_SERVER["SERVER_SOFTWARE"]],
-            ['name' => 'PHP运行方式', 'value'=> php_sapi_name()],
-            ['name' => '上传附件限制', 'value'=> ini_get('upload_max_filesize')],
-            ['name' => '执行时间限制', 'value'=> ini_get('max_execution_time').'秒'],
-            ['name' => '服务器时间', 'value'=> date("Y年n月j日 H:i:s")],
-            ['name' => '北京时间', 'value'=> gmdate("Y年n月j日 H:i:s",time()+8*3600)],
-            ['name' => '服务器域名/IP', 'value'=> $_SERVER['SERVER_NAME'].' [ '.gethostbyname($_SERVER['SERVER_NAME']).' ]'],
-            ['name' => '剩余空间', 'value'=> round((disk_free_space(".")/(1024*1024)),2).'M'],
-            ['name' => 'register_globals', 'value'=> get_cfg_var("register_globals")=="1" ? "ON" : "OFF"],
-            ['name' => 'magic_quotes_gpc', 'value'=> (1===get_magic_quotes_gpc())?'YES':'NO'],
-            ['name' => 'magic_quotes_runtime', 'value'=> (1===get_magic_quotes_runtime())?'YES':'NO'],
-		);
-    
+        // 统计今日操作
+        $computeRatio = function($num1, $num2) {
+            return round($num1 / $num2 * 100);
+        };
+        $startTime = Carbon::now()->startOfDay()->timestamp;
+        $todayCount = [
+            // 管理员总数
+            'admin' => $computeRatio(
+                Db::name('admin')->where('create_time', '>=', $startTime)->count(), 
+                $count['admin']
+            ),
+            // 操作日志总数
+            'action_log' => $computeRatio(
+                Db::name('adminLog')->where('act_time', '>=', $startTime)->count(),
+                $count['action_log']
+            ),
+            // 登录成功总数
+            'login_success' => $computeRatio(
+                Db::name('adminLog')->where('act_time', '>=', $startTime)->where('des', '登陆成功')->count(),
+                $count['login_success']
+            ),
+            // 登录失败总数
+            'login_fail' => $computeRatio(
+                Db::name('adminLog')->where('act_time', '>=', $startTime)->where('des','<>','登陆成功')->count(),
+                $count['login_fail']
+            )
+        ];
+
+        // 图表1 统计 - 日志操作频率
+        $runWeekDate = function($week) {
+            return Carbon::now()->weekday($week)->format('Y-m-d');
+        };
+
+        $chart1 = [];
+        $chart2 = [];
+
+        for($i = 0; $i < 7; $i++) {
+            $chart1[$i] = Db::name('adminLog')->whereBetweenTime('act_time', $runWeekDate($i + 1))->count();
+            $chart2[$i] = [
+                Db::name('adminLog')->whereBetweenTime('act_time', $runWeekDate($i + 1))->where('des', '登陆成功')->count(),
+                Db::name('adminLog')->whereBetweenTime('act_time', $runWeekDate($i + 1))->where('des','<>','登陆成功')->count()
+            ];
+        }
+
         success('ok!',[
-            'info' => $info,
+            'chart_data_1' => $chart1,
+            'chart_data_2' => $chart2,
+            'today_count' => $todayCount,
             'count' => $count
         ]);
     }
