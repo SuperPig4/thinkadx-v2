@@ -54,8 +54,11 @@ V2版本比V1版本改进了不少,V1版本应该不会再去维护了
 3、到这里基本上已经搭建起来了,把apache或者nginx配置一下就行,默认是已经配置好apache的了,不会的话看官方文档
 ~~~
 
++ [开发文档](https://gitee.com/first_pig/thinkadx-v2/wikis/Thinkadx-Base)
+
 搭建模板(目前只有这一个模板,后期可能会增加更多样的模板)
 + [搭建模板教程](https://gitee.com/first_pig/thinkadx-template)
+
 
 ## 社交
 - 企鹅群 801456419
