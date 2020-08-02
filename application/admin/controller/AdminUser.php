@@ -172,7 +172,7 @@ class AdminUser extends Base {
         if(empty($user)) {
             $this->request->act_log = '尝试登陆';
             error('请输入正确的账号');
-        } else {
+        } else { 
             $oauth = $user->adminOauth()->where([
                 'port_type' => $data['port_type'],
                 'oauth_type' => $data['oauth_type']
@@ -186,28 +186,19 @@ class AdminUser extends Base {
                 ];
                 error('未找到该登录方式');
             } else {
-                // $loginResult = Main::init(AdminOauthModel::class, Main::ModeList['PASSWORD'])
-                // ->setPortType('api')
-                // ->setId($data['password'])
-                // ->setUniqueId($oauth->unique_identifier)
-                // ->setCacheData($user->toArray())
-                // ->setOauthModel($oauth)
-                // ->logout()
-                // ->login();
-
-                $oauth = Main::init(AdminOauthModel::class, Main::ModeList['PASSWORD'])
+                $oauthThinadx = Main::init(AdminOauthModel::class, Main::ModeList['PASSWORD'])
                 ->setPortType('api')
                 ->setId($data['password'])
                 ->setUniqueId($oauth->unique_identifier)
                 ->setCacheData($user->toArray())
                 ->setOauthModel($oauth);
 
-                $loginResult = $oauth->login();
+                $loginResult = $oauthThinadx->login();
             }
 
             if(is_array($loginResult)) {
                 // 下线其他令牌
-                $oauth->logout();
+                $oauthThinadx->logout();
 
                 // 默认token登录,如果是session的话这里也要改
                 // 绑定容器

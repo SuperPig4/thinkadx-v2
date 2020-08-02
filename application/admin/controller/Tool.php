@@ -31,7 +31,7 @@ class Tool extends Base {
 
         // 统计今日操作
         $computeRatio = function($num1, $num2) {
-            return round($num1 / $num2 * 100);
+            return $num1 <= 0 ? 0 : round($num1 / $num2 * 100);
         };
         $startTime = Carbon::now()->startOfDay()->timestamp;
         $todayCount = [

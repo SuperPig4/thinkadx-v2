@@ -44,7 +44,6 @@ V2版本比V1版本改进了不少,V1版本应该不会再去维护了
 [apache、nginx配置手册](https://www.kancloud.cn/manual/thinkphp5_1/353955)
 
 ~~~
-1、打开根目录的/config/database.php配置文件把自己的数据库(字符集utf8)信息填进去,然后在根目录打开命令行(能运行到根目录的think就行)
 1、创建.env并将.example.env内容copy到.env中,根据注释配置.
 
 2、执行命令(项目根目录)
