@@ -3,7 +3,7 @@
 # Author: 奔跑猪
 # Date: 2020-07-16 07:00:03
 # LastEditors: 奔跑猪
-# LastEditTime: 2020-07-17 08:29:00
+# LastEditTime: 2020-08-08 04:09:38
 # Descripttion: 
 #============================================================================= */
 
@@ -14,12 +14,6 @@ use app\http\middleware\LogicAbstract\auth\AdxToken as AdxTokenAbstract;
 
 class AdxToken extends AdxTokenAbstract {
 
-    /**
-     * 缓存数据名
-     */
-    static public function getAuthDataName() {
-        return 'admin';
-    }
 
     /**
      * 获得模型
@@ -69,5 +63,9 @@ class AdxToken extends AdxTokenAbstract {
             'Upload' => ['index'],
             'Config' => ['get_system_config', 'get_system_config2'],
         ];
+    }
+
+    static public function getOauthTypeMap() {
+        return true;
     }
 }

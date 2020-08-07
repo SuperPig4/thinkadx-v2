@@ -3,7 +3,7 @@
 # Author: 奔跑猪
 # Date: 2020-07-15 07:36:09
 # LastEditors: 奔跑猪
-# LastEditTime: 2020-07-17 08:27:37
+# LastEditTime: 2020-08-08 04:09:12
 # Descripttion: token抽象类
 #============================================================================= */
 namespace app\http\middleware\LogicAbstract\auth;
@@ -19,4 +19,6 @@ abstract class AdxToken extends Base {
     // oauth模型的用户ID字段
     abstract static public function getOauthUserPk();
     
+    // 授权类型映射
+    abstract static public function getOauthTypeMap();
 }

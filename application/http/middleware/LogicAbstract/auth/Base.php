@@ -11,12 +11,6 @@ namespace app\http\middleware\LogicAbstract\auth;
 
 abstract class Base {
 
-    /**
-     * 获得缓存数据标识符名(类似 session.admin)
-     * 
-     * @return String
-     */
-    abstract static public function getAuthDataName();
 
     /**
      * 标识符相关联的模型

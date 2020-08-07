@@ -3,7 +3,7 @@
 # Author: 奔跑猪
 # Date: 2020-06-14 19:58:10
 # LastEditors: 奔跑猪
-# LastEditTime: 2020-07-19 10:38:05
+# LastEditTime: 2020-08-08 04:10:18
 # Descripttion: adx token验证
 #============================================================================= */
 namespace app\http\middleware\auth;
@@ -44,6 +44,7 @@ class AdxToken extends Constraint {
             $accessToken  = $request->header('token');
             $oauthType    = $request->header('oauth-type');
             $portType     = $request->header('port-type');
+            $oauthTypeMap = $logic::getOauthTypeMap();
             $checkResult  = false;
             
             try {
@@ -51,14 +52,21 @@ class AdxToken extends Constraint {
                 if(empty($oauthType) || empty($portType)) {
                     return response()->code(401);
                 }
-                $oauthMain = OauthMain::init($this->logic::getOauthModel(), $oauthType);
+
+                if(is_array($oauthTypeMap) && isset($oauthTypeMap[$oauthType])) {
+                    $oauthType = $oauthTypeMap[$oauthType];
+                } else if($oauthTypeMap !== true) {
+                    throw new \think\Exception('oauth error');    
+                }
+
+                $oauthMain = OauthMain::init($this->logic::getOauthModel(), $oauthType)->setPortType($portType)->setModeName(strtoupper($oauthType));
             } catch (\Exception $e) {
-                return response()->code(404);
+                return response()->data(json_encode(['msg'=>'oauth error']))->code(404);
             }
 
             if(empty($refreshToken) == false) {
                 // 令牌验证刷新
-                $refreshResult = $oauthMain->setPortType($portType)->setTableUserPk($this->logic::getOauthUserPk())->refresh($refreshToken);
+                $refreshResult = $oauthMain->setTableUserPk($this->logic::getOauthUserPk())->refresh($refreshToken);
                 if($refreshResult === false) {
                     return $this->logic::fail(401);
                 } else {
@@ -71,7 +79,7 @@ class AdxToken extends Constraint {
                 }
             } else if(empty($accessToken) === false) {
                 // 访问令牌刷新
-                $checkResult = $oauthMain->setPortType($portType)->check($accessToken);
+                $checkResult = $oauthMain->check($accessToken);
             } else {
                 return $this->logic::fail(401);
             }
