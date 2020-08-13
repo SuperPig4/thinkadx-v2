@@ -3,7 +3,7 @@
 # Author: 奔跑猪
 # Date: 2020-06-14 19:58:10
 # LastEditors: 奔跑猪
-# LastEditTime: 2020-08-08 04:10:18
+# LastEditTime: 2020-08-13 23:38:09
 # Descripttion: adx token验证
 #============================================================================= */
 namespace app\http\middleware\auth;
@@ -40,12 +40,13 @@ class AdxToken extends Constraint {
         $this->ignoreList = $logic::getIgnores();
         
         if(!$this->ignore_check()) {
-            $refreshToken = $request->header('refresh-token');
-            $accessToken  = $request->header('token');
-            $oauthType    = $request->header('oauth-type');
-            $portType     = $request->header('port-type');
-            $oauthTypeMap = $logic::getOauthTypeMap();
-            $checkResult  = false;
+            $refreshToken   = $request->header('refresh-token');
+            $accessToken    = $request->header('token');
+            $oauthType      = $request->header('oauth-type');
+            $portType       = $request->header('port-type');
+            $oauthTypeModel = $portType;
+            $oauthTypeMap   = $logic::getOauthTypeMap();
+            $checkResult    = false;
             
             try {
                 // 初始化 Oauth
@@ -54,12 +55,14 @@ class AdxToken extends Constraint {
                 }
 
                 if(is_array($oauthTypeMap) && isset($oauthTypeMap[$oauthType])) {
-                    $oauthType = $oauthTypeMap[$oauthType];
+                    $oauthTypeModel = $oauthTypeMap[$oauthType];
                 } else if($oauthTypeMap !== true) {
                     throw new \think\Exception('oauth error');    
                 }
 
-                $oauthMain = OauthMain::init($this->logic::getOauthModel(), $oauthType)->setPortType($portType)->setModeName(strtoupper($oauthType));
+                $oauthMain = OauthMain::init($this->logic::getOauthModel(), $oauthTypeModel)
+                ->setPortType($portType)
+                ->setModeName(strtoupper($oauthType));
             } catch (\Exception $e) {
                 return response()->data(json_encode(['msg'=>'oauth error']))->code(404);
             }
