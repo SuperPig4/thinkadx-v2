@@ -60,7 +60,12 @@ V2版本比V1版本改进了不少,V1版本应该不会再去维护了
 + [搭建模板教程](https://gitee.com/first_pig/thinkadx-template)
 
 
-## 社交
-- 企鹅群 801456419
+## 长期内目标
+- 解耦 AdxToken和LoadData并支持数据库
+- 增加 定时器
+- 完善 容器化(docker)
+- 完善 Oauth2扩展授权(至少完成 一种模式)
+- 完善 Captcha扩展(至少完成 一种验证码种类)
+- 完善 RuleAuth扩展
 
 

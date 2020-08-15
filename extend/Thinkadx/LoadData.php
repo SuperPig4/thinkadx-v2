@@ -45,8 +45,12 @@ class LoadData {
     }
 
     public function __call($name, $args){
-        $this->value = call_user_func_array([$this, $name], $args);
-        return $this;
+        $value = call_user_func_array([$this, $name], $args);
+        if(empty($value)) {
+            return $this;
+        } else {
+            return $value;
+        }
     }
 
 
