@@ -3,7 +3,7 @@
 # Author: 奔跑猪
 # Date: 2020-06-14 19:58:10
 # LastEditors: 奔跑猪
-# LastEditTime: 2020-08-13 23:38:09
+# LastEditTime: 2020-09-16 05:37:19
 # Descripttion: adx token验证
 #============================================================================= */
 namespace app\http\middleware\auth;
@@ -44,7 +44,7 @@ class AdxToken extends Constraint {
             $accessToken    = $request->header('token');
             $oauthType      = $request->header('oauth-type');
             $portType       = $request->header('port-type');
-            $oauthTypeModel = $portType;
+            $oauthTypeModel = $oauthType;
             $oauthTypeMap   = $logic::getOauthTypeMap();
             $checkResult    = false;
             
@@ -76,8 +76,8 @@ class AdxToken extends Constraint {
                     $checkResult = $oauthMain->check($refreshResult['token']);
                     if($checkResult !== false) {
                         // 返回新令牌
-                        Response::header('access-token', $refreshResult['token'])->send();
-                        Response::header('access-token-expire-time', $refreshResult['expire_time'])->send();
+                        header('access-token:' . $refreshResult['token']);
+                        header('access-token-expire-time:' . $refreshResult['expire_time']);
                     }
                 }
             } else if(empty($accessToken) === false) {
@@ -98,13 +98,24 @@ class AdxToken extends Constraint {
         return $next($request, false);
     }
 
+
     /**
      * 缓存逻辑
      */
     public function storage($data) {
-        $config = $this->logic::getStorageConfig();
-        OauthMain::init($config['modelClass'], $config['model']->oauth_type)
-        ->setPortType($config['model']->port_type)
+        $config    = $this->logic::getStorageConfig();
+        $oauthType = $config['model']->oauth_type;
+        $oauthTypeModel = $oauthType;
+        $oauthTypeMap = $this->logic::getOauthTypeMap();
+        $portType     = $config['model']->port_type;
+
+        if(is_array($oauthTypeMap) && isset($oauthTypeMap[$oauthType])) {
+            $oauthTypeModel = $oauthTypeMap[$oauthType];
+        }
+        
+        OauthMain::init($config['modelClass'], $oauthTypeModel)
+        ->setPortType($portType)
+        ->setModeName(strtoupper($oauthType))
         ->setCacheData($data)
         ->setOauthModel($config['model'])
         ->updateCacheData();

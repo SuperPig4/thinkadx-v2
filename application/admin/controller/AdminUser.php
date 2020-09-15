@@ -167,16 +167,18 @@ class AdminUser extends Base {
         if($result !== true) {
             error($result);
         }
-
-        $user = AdminModel::where('access', $data['access'])->find();
+        
+        $user = AdminModel::with(['adminOauth' => function($query) use ($data) {
+            $query->where([
+                'port_type' => $data['port_type'],
+                'oauth_type' => $data['oauth_type']
+            ]);
+        }])->where('access', $data['access'])->find();
         if(empty($user)) {
             $this->request->act_log = '尝试登陆';
             error('请输入正确的账号');
         } else { 
-            $oauth = $user->adminOauth()->where([
-                'port_type' => $data['port_type'],
-                'oauth_type' => $data['oauth_type']
-            ])->find();
+            $oauth = $user['admin_oauth'][0];
             if(is_null($oauth)) {
                 $this->request->act_log = [
                     [

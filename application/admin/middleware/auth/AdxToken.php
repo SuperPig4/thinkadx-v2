@@ -3,7 +3,7 @@
 # Author: 奔跑猪
 # Date: 2020-07-16 07:00:03
 # LastEditors: 奔跑猪
-# LastEditTime: 2020-08-08 04:09:38
+# LastEditTime: 2020-09-16 05:47:30
 # Descripttion: 
 #============================================================================= */
 
@@ -22,7 +22,6 @@ class AdxToken extends AdxTokenAbstract {
         return \app\common\model\Admin::class;
     }
 
- 
     /**
      * 验证不通过回调
      */
@@ -38,7 +37,7 @@ class AdxToken extends AdxTokenAbstract {
     static public function getStorageConfig() {
         return [
             'modelClass'  => AdminOauth::class,
-            'model'       => app('adminData')->admin_oauth[0]
+            'model'       => AdminOauth::get(app(self::containerName())->admin_oauth[0]->id)
         ];
     }
 
