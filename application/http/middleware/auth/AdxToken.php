@@ -3,7 +3,7 @@
 # Author: 奔跑猪
 # Date: 2020-06-14 19:58:10
 # LastEditors: 奔跑猪
-# LastEditTime: 2020-09-16 05:37:19
+# LastEditTime: 2020-09-29 00:11:37
 # Descripttion: adx token验证
 #============================================================================= */
 namespace app\http\middleware\auth;
@@ -31,9 +31,6 @@ class AdxToken extends Constraint {
      *      参数二 忽略列表
      */
     public function handle($request, \Closure $next, $logic) {
-        // 设置响应头
-        header('Access-Control-Expose-Headers: access-token, access-token-expire-time');
-        
         // 逻辑
         $this->logic      = $logic;
         // 判断是否忽略
@@ -76,8 +73,11 @@ class AdxToken extends Constraint {
                     $checkResult = $oauthMain->check($refreshResult['token']);
                     if($checkResult !== false) {
                         // 返回新令牌
-                        header('access-token:' . $refreshResult['token']);
-                        header('access-token-expire-time:' . $refreshResult['expire_time']);
+                        $createTokenAr = [
+                            'Access-Control-Expose-Headers' => 'access-token, access-token-expire-time',
+                            'access-token' => $refreshResult['token'],
+                            'access-token-expire-time' => $refreshResult['expire_time'],
+                        ];
                     }
                 }
             } else if(empty($accessToken) === false) {
@@ -95,7 +95,11 @@ class AdxToken extends Constraint {
             }
         }
 
-        return $next($request, false);
+        $response = $next($request, false);
+        if(isset($createTokenAr)) {
+            $response->header($createTokenAr);
+        }
+        return $response;
     }
 
 

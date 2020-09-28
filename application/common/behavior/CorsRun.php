@@ -3,30 +3,30 @@
 # Author: 奔跑猪
 # Date: 2020-06-06 10:01:21
 # LastEditors: 奔跑猪
-# LastEditTime: 2020-07-17 08:14:20
+# LastEditTime: 2020-09-29 00:10:51
 # Descripttion: 
 #============================================================================= */
 namespace app\common\behavior;
 use think\facade\Request;
 use think\facade\Response;
+use think\route\Rule;
 
 class CorsRun {
-    public function appInit(){
-        // 允许 $originarr 数组内的 域名跨域访问
-        header('Access-Control-Allow-Origin:*');
-        // 响应类型
-        header('Access-Control-Allow-Methods:*');
-        // 带 cookie 的跨域访问
-        header('Access-Control-Allow-Credentials: true');
-        // 响应头设置
-        header('Access-Control-Allow-Headers:*');
 
+    protected $headers = [
+        'Access-Control-Allow-Origin' => '*',
+        'Access-Control-Allow-Methods' => '*',
+        'Access-Control-Allow-Credentials' => 'true',
+        'Access-Control-Allow-Headers' => '*',
+    ];
+
+    public function appInit(){
         if(Request::isOptions()){
-            exit();
+            Response::header($this->headers)->code(200)->send();
         }
     }
 
-    // public function appEnd() {
-    //     echo '结束了';
-    // }
+    public function appEnd($response) {
+        $response->header($this->headers);
+    }
 }
