@@ -21,12 +21,22 @@ class CorsRun {
     ];
 
     public function appInit(){
+        // 判断是否开启调试模式
+        if(config('app_debug')) {
+            // 直接设置响应头 方便调试看错误
+            header('Access-Control-Allow-Origin:*');
+            header('Access-Control-Allow-Methods:*');
+            header('Access-Control-Allow-Credentials: true');
+            header('Access-Control-Allow-Headers:*');
+        } 
+
         if(Request::isOptions()){
             Response::header($this->headers)->code(200)->send();
+            exit;
         }
     }
 
-    public function appEnd($response) {
+    public function responseSend($response) {
         $response->header($this->headers);
     }
 }

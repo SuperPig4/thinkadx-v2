@@ -24,7 +24,7 @@ class AdminOauth extends Model {
         return [
             'identifier' => md5($pwd.$salt),
             'unique_identifier' => $salt,
-            'oauth_type' => 'pwd',
+            'oauth_type' => 'password',
             'port_type' => 'api'
         ];
     }

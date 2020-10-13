@@ -2,8 +2,8 @@
 /* ============================================================================= #
 # Autor: 奔跑猪
 # Date: 2020-07-16 05:15:52
-# LastEditors: 奔跑猪
-# LastEditTime: 2020-07-16 05:31:24
+# LastEditors: Please set LastEditors
+# LastEditTime: 2020-10-13 11:39:51
 # Description: 管理员
 # ============================================================================= */
 
@@ -75,16 +75,17 @@ class AdminUser extends Base {
 
 
     // 重写编辑增加
-    public function add_edit() {
+    protected function add_edit() {
         $data = $this->request->param();
         if(empty($data['id'])) {
             // 新增
             $status = AdminModel::create($data)
             ->adminOauth()
             ->save(AdminOauthModel::getPasswordBaseConfig($data['add_data_password']));
+
         } else {
             // 编辑
-            $model = new Admin();
+            $model = new AdminModel();
             $status = $model->save($data,['id' => $data['id']]);
         }
 
@@ -167,19 +168,19 @@ class AdminUser extends Base {
         if($result !== true) {
             error($result);
         }
-        
+
         $user = AdminModel::with(['adminOauth' => function($query) use ($data) {
             $query->where([
                 'port_type' => $data['port_type'],
                 'oauth_type' => $data['oauth_type']
             ]);
         }])->where('access', $data['access'])->find();
+
         if(empty($user)) {
             $this->request->act_log = '尝试登陆';
             error('请输入正确的账号');
         } else { 
-            $oauth = $user['admin_oauth'][0];
-            if(is_null($oauth)) {
+            if($user['admin_oauth']->isEmpty()) {
                 $this->request->act_log = [
                     [
                         'admin_id' => $user->id,
@@ -188,6 +189,7 @@ class AdminUser extends Base {
                 ];
                 error('未找到该登录方式');
             } else {
+                $oauth = $user['admin_oauth'][0];
                 $oauthThinadx = Main::init(AdminOauthModel::class, Main::ModeList['PASSWORD'])
                 ->setPortType('api')
                 ->setId($data['password'])

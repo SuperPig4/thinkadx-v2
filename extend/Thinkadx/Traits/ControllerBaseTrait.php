@@ -2,8 +2,8 @@
 /* ============================================================================= #
 # Autor: 奔跑猪
 # Date: 2020-07-15 09:44:52
-# LastEditors: 奔跑猪
-# LastEditTime: 2020-07-16 04:51:50
+# LastEditors: Please set LastEditors
+# LastEditTime: 2020-10-13 11:34:43
 # Description: 通用控制器基类
 # ============================================================================= */
 
@@ -79,7 +79,7 @@ trait ControllerBaseTrait {
      * @return void
      */
     public function add() {
-        $this->add_edit();
+        static::add_edit();
     }
 
 
@@ -89,7 +89,7 @@ trait ControllerBaseTrait {
      * @return void
      */
     public function edit() {
-        $this->add_edit();
+        static::add_edit();
     }
 
 
@@ -133,7 +133,7 @@ trait ControllerBaseTrait {
      *
      * @return void
      */
-    private function add_edit() {
+    protected function add_edit() {
         $params = $this->getParams();
         $db     = $this->getModelOrDb();
         $dbType = $this->getModelOrDb(true);
