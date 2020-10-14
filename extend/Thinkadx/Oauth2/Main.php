@@ -2,8 +2,8 @@
 /* ============================================================================= #
 # Autor: 奔跑猪
 # Date: 2020-07-06 16:35:22
-# LastEditors: 奔跑猪
-# LastEditTime: 2020-07-06 22:31:34
+# LastEditors: Please set LastEditors
+# LastEditTime: 2020-10-14 11:31:14
 # Description: 
 #        表设计请遵循thinkadx tx_admin_oauth表的结构 
 #        目前该版本只支持redis
@@ -180,6 +180,7 @@ class Main {
                 // 刷新令牌
                 $this->setOauthModel($oauth);
                 $this->setCacheData($refreshContent['access_content']);
+                $this->setAccessTokenExpireTime($refreshContent['access_expire_time_z']);
                 $newToken = $this->create_access_token();
                 $refreshContent['access_token'] = $newToken['token'];
                 $refreshContent['access_expire_time']   = time() + $newToken['expire_time'];
