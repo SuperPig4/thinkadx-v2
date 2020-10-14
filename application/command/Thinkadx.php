@@ -13,7 +13,9 @@ use app\common\model\Admin;
 use app\common\model\AdminOauth;
 use app\common\model\AdminGroup;
 use app\common\model\AdminRule;
+use Exception;
 use think\Container;
+use Thinkadx\Oauth2\Main as Oauth2Main;
 
 class Thinkadx extends Command
 {
@@ -72,6 +74,16 @@ class Thinkadx extends Command
                             }
                         }
                         $output->writeln('action success');
+                    break;
+                case 'kill_expired_token' :
+                        // 删除过期token
+                        try {
+                            Oauth2Main::taskKillNullToken();
+                            $output->writeln('action success');
+                        } catch(\Exception $e) {
+                            // 发送邮件
+                            throw new \think\Exception('Kill_expired_token fail', 10006);
+                        }
                     break;
             }
         }
