@@ -23,7 +23,7 @@ return [
         // 缓存前缀
         'prefix' =>  'default',
         // 缓存目录
-        'path'  =>  '../runtime/cache/',
+        // 'path'  =>  '../runtime/cache/',
     ],
     'redis'    =>    [
         'type'    =>    'redis',
