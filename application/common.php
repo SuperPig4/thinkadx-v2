@@ -2,7 +2,7 @@
 
 if (!function_exists('del_expired_file_cache')) {
     /**
-     * 删除过期的file缓存
+     * 删除过期的file缓存 - x  
      *
      * @param String $filename 文件名字
      * @return void
